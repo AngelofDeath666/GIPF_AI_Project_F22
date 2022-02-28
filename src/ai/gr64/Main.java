@@ -1,4 +1,4 @@
-package com.company;
+package ai.gr64;
 
 public class Main {
 
