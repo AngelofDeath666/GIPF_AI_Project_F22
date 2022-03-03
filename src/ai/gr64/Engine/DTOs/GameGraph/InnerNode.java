@@ -13,6 +13,11 @@ public class InnerNode implements INode{
         neighbors[dir.getValue()] = node;
     }
 
+    @Override
+    public boolean hasNeighbour(Direction dir) {
+        return neighbors[dir.getValue()] != null;
+    }
+
 
 }
 
