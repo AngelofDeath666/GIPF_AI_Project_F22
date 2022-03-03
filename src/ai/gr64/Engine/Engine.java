@@ -1,6 +1,8 @@
-package ai.gr64.Engine.DTOs;
+package ai.gr64.Engine;
 
 import ai.gr64.AI.IMoveGen;
+import ai.gr64.Engine.DTOs.GameState;
+import ai.gr64.Engine.DTOs.Move;
 import ai.gr64.UI.IUI;
 
 public class Engine {

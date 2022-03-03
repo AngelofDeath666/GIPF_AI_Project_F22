@@ -1,7 +1,7 @@
 package ai.gr64;
 
 import ai.gr64.AI.RandomAI;
-import ai.gr64.Engine.DTOs.Engine;
+import ai.gr64.Engine.Engine;
 import ai.gr64.UI.ASCIIUI;
 
 public class Main {
