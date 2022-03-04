@@ -11,11 +11,18 @@ public class InnerNode implements INode{
     @Override
     public void addNeighbor(INode node, Direction dir){
         neighbors[dir.getValue()] = node;
+        node.addOneWayNeighbor(this, Direction.opposite(dir));
     }
 
     @Override
     public boolean hasNeighbour(Direction dir) {
         return neighbors[dir.getValue()] != null;
+    }
+
+    @Override
+    public void addOneWayNeighbor(INode node, Direction dir) {
+        neighbors[dir.getValue()] = node;
+        
     }
 
 
