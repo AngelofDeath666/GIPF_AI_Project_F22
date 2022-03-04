@@ -8,19 +8,18 @@ import ai.gr64.Engine.DTOs.GameGraph.OuterNode;
 
 public class StateFactory {
    
-    public static GameState create(int layers){
-        GameState state = new GameState();
+    public static GameState create(int layers, int startingPeices){
         int numNodes = (((6 + (layers + 1) * 6)*(layers + 1))/2) + 1;
         INode[] nodes = new INode[numNodes];
         int[] layerEnds = new int[2*layers+3];
-
+        
         for (int i = 0; i < layerEnds.length; i++) {
             if (i == 0) {
                 layerEnds[0] = layers +2;
-
+                
             } else if (i <= layers+1) {
                 layerEnds[i] = layerEnds[i-1] + layers+2+i;
-
+                
             } else {
                 layerEnds[i] = layerEnds[i-1] + layers+2+(layers*2+3)-i-1;
             }
@@ -29,12 +28,12 @@ public class StateFactory {
         for (int i = 0; i < numNodes; i++) {
             if (OuterNode(i, layerEnds)) {
                 nodes[i] = new OuterNode();
-
+                
             } else {
                 nodes[i] = new InnerNode();
             }
         }
-
+        
         for (int i = 0; i < numNodes; i++) {
             if (nodes[i] instanceof OuterNode) {
                 continue;
@@ -59,17 +58,18 @@ public class StateFactory {
             if (!nodes[i].hasNeighbour(Direction.DOWN_RIGHT)) {
                 nodes[i].addNeighbor(nodes[i+size+1],Direction.DOWN_RIGHT);
             }
-
+            
         }
 
-
+        GameState state = new GameState(startingPeices, nodes, layers);
+        
         return state;
         
     }
 
     private static int GetLayer(int nodeIndex, int[] layerEnds) {
         if (nodeIndex < 0)
-            throw new IndexOutOfBoundsException();
+        throw new IndexOutOfBoundsException();
         for (int i = 0; i < layerEnds.length; i++) {
             if (nodeIndex < layerEnds[i]) {
                 return i+1;
