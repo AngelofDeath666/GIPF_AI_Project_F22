@@ -36,10 +36,10 @@ public class StateFactory {
         }
 
         for (int i = 0; i < numNodes; i++) {
-            int currentLayer = GetLayer(i,layerEnds)-1;
             if (nodes[i] instanceof OuterNode) {
                 continue;
             }
+            int currentLayer = GetLayer(i,layerEnds)-1;
             int size = layerEnds[currentLayer]-layerEnds[currentLayer-1];
             if (!nodes[i].hasNeighbour(Direction.LEFT)) {
                 nodes[i].addNeighbor(nodes[i-1],Direction.LEFT);
@@ -68,6 +68,8 @@ public class StateFactory {
     }
 
     private static int GetLayer(int nodeIndex, int[] layerEnds) {
+        if (nodeIndex < 0)
+            throw new IndexOutOfBoundsException();
         for (int i = 0; i < layerEnds.length; i++) {
             if (nodeIndex < layerEnds[i]) {
                 return i+1;
