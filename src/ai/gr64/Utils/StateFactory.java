@@ -1,14 +1,17 @@
 package ai.gr64.Utils;
 
 import ai.gr64.Data.Enums.Direction;
+import ai.gr64.Data.Enums.Piece;
+import ai.gr64.Data.Enums.StartingPieces;
 import ai.gr64.Data.Interfaces.INode;
 import ai.gr64.Engine.DTOs.GameGraph.InnerNode;
 import ai.gr64.Engine.DTOs.GameState;
 import ai.gr64.Engine.DTOs.GameGraph.OuterNode;
+import jdk.jshell.spi.ExecutionControl;
 
 public class StateFactory {
    
-    public static GameState create(int layers, int startingPeices){
+    public static GameState create(int layers, StartingPieces startingMode, int startingPieces) {
         int numNodes = (((6 + (layers + 1) * 6)*(layers + 1))/2) + 1;
         INode[] nodes = new INode[numNodes];
         int[] layerEnds = new int[2*layers+3];
@@ -61,7 +64,30 @@ public class StateFactory {
             
         }
 
-        GameState state = new GameState(startingPeices, nodes, layers);
+        switch (startingMode) {
+            case NONE:
+                break;
+
+            case NORMAL:
+               for (int i = 0; i < 6; i++) {
+                   INode workingNode = nodes[numNodes/2+1];
+
+                   for (int j = 0; j < layers; j++) {
+                       workingNode = workingNode.neighbour(Direction.fromValue(i));
+                   }
+                   if (i%2 == 0) {
+                       workingNode.placePiece(Piece.WHITE);
+                   } else {
+                       workingNode.placePiece(Piece.BLACK);
+                   }
+               }
+
+            case DOUBLE:
+                throw new Error("Handling of Gifp pieces not implemented yet");
+
+        }
+
+        GameState state = new GameState(startingPieces, nodes, layers);
         
         return state;
         

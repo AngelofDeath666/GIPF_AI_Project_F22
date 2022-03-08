@@ -20,6 +20,16 @@ public class InnerNode implements INode{
     }
 
     @Override
+    public INode neighbour(Direction dir) {
+        return neighbors[dir.getValue()];
+    }
+
+    @Override
+    public void placePiece(Piece piece) {
+        this.piece = piece;
+    }
+
+    @Override
     public void addOneWayNeighbor(INode node, Direction dir) {
         neighbors[dir.getValue()] = node;
         
