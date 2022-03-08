@@ -10,11 +10,10 @@ public class Engine {
     private IUI UI;
     private GameState state;
 
-    public Engine(IMoveGen moveGen1, IMoveGen moveGen2, IUI ui) {
+    public Engine(IMoveGen moveGen1, IMoveGen moveGen2, IUI ui, GameState state) {
         MoveGen1 = moveGen1;
         MoveGen2 = moveGen2;
         UI = ui;
-        //state = new GameState();
     }
     
     public void Run() {
