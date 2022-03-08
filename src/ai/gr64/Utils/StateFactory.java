@@ -42,7 +42,8 @@ public class StateFactory {
             }
             int currentLayer = GetLayer(i, layerEnds) - 1;
             int size = layerEnds[currentLayer] - layerEnds[currentLayer - 1];
-            int modifier = (currentLayer >= layerEnds.length/2 ? 1 : 0);
+            int upModifier = (currentLayer > layerEnds.length/2 ? 1 : 0);
+            int downModifier = (currentLayer >= layerEnds.length/2 ? 1 : 0);
             if (!nodes[i].hasNeighbour(Direction.LEFT)) {
                 nodes[i].addNeighbor(nodes[i - 1], Direction.LEFT);
             }
@@ -50,16 +51,16 @@ public class StateFactory {
                 nodes[i].addNeighbor(nodes[i + 1], Direction.RIGHT);
             }
             if (!nodes[i].hasNeighbour(Direction.UP_LEFT)) {
-                nodes[i].addNeighbor(nodes[i - size - modifier], Direction.UP_LEFT);
+                nodes[i].addNeighbor(nodes[i - size - upModifier], Direction.UP_LEFT);
             }
             if (!nodes[i].hasNeighbour(Direction.UP_RIGHT)) {
-                nodes[i].addNeighbor(nodes[i - size + 1 - modifier], Direction.UP_RIGHT);
+                nodes[i].addNeighbor(nodes[i - size + 1 - upModifier], Direction.UP_RIGHT);
             }
             if (!nodes[i].hasNeighbour(Direction.DOWN_LEFT)) {
-                nodes[i].addNeighbor(nodes[i + size - modifier], Direction.DOWN_LEFT);
+                nodes[i].addNeighbor(nodes[i + size - downModifier], Direction.DOWN_LEFT);
             }
             if (!nodes[i].hasNeighbour(Direction.DOWN_RIGHT)) {
-                nodes[i].addNeighbor(nodes[i + size + 1 - modifier], Direction.DOWN_RIGHT);
+                nodes[i].addNeighbor(nodes[i + size + 1 - downModifier], Direction.DOWN_RIGHT);
             }
 
         }
