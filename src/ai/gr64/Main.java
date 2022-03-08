@@ -9,7 +9,7 @@ import ai.gr64.Utils.StateFactory;
 public class Main {
 
     public static void main(String[] args) {
-        StateFactory.create(1, StartingPieces.NORMAL,15);
+        StateFactory.create(3, StartingPieces.NORMAL,15);
         var UI = new ASCIIUI();
         var moveGen1 = new RandomAI();
         var moveGen2 = new RandomAI();

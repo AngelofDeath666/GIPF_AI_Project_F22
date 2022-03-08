@@ -1,5 +1,7 @@
 package ai.gr64.Data.Enums;
 
+import java.security.InvalidParameterException;
+
 public enum Direction {
     UP_LEFT(0),
     UP_RIGHT(1),
@@ -33,7 +35,10 @@ public enum Direction {
             case 5:
                 return Direction.LEFT;
             default:
-                throw new IndexOutOfBoundsException();
+                if (value < 0) {
+                    throw new InvalidParameterException("Value cannot be negative.");
+                }
+                return fromValue(value%6);
         }
 
     }
