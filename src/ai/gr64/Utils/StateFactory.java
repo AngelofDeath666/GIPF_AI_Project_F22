@@ -42,7 +42,7 @@ public class StateFactory {
             }
             int currentLayer = GetLayer(i, layerEnds) - 1;
             int size = layerEnds[currentLayer] - layerEnds[currentLayer - 1];
-            int modifier = (layerEnds.length / 2 < currentLayer ? 1 : 0);
+            int modifier = (currentLayer >= layerEnds.length/2 ? 1 : 0);
             if (!nodes[i].hasNeighbour(Direction.LEFT)) {
                 nodes[i].addNeighbor(nodes[i - 1], Direction.LEFT);
             }
@@ -70,7 +70,7 @@ public class StateFactory {
 
             case NORMAL:
                 for (int i = 0; i < 6; i++) {
-                    INode workingNode = nodes[numNodes / 2 + 1];
+                    INode workingNode = nodes[numNodes / 2];
 
                     for (int j = 0; j < layers; j++) {
                         workingNode = workingNode.neighbour(Direction.fromValue(i));
@@ -81,10 +81,9 @@ public class StateFactory {
                         workingNode.placePiece(Piece.BLACK);
                     }
                 }
-
+                break;
             case DOUBLE:
                 throw new Error("Handling of Gifp pieces not implemented yet");
-
         }
 
         GameState state = new GameState(startingPieces, nodes, layers);
