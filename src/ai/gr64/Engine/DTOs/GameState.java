@@ -21,7 +21,11 @@ public class GameState {
          for (int j = 0; j < layers + 1; j++) {
             workingIndex++;
             if (workingIndex == outerNodes.length) break; 
-            outerNodes[workingIndex] = outerNodes[workingIndex-1].neighbour(Direction.fromValue(i+2));
+            INode nextNode = outerNodes[workingIndex-1];
+            nextNode = nextNode.neighbour(Direction.fromValue(i+3));
+            nextNode = nextNode.neighbour(Direction.fromValue(i+1));
+
+            outerNodes[workingIndex] = nextNode;
             
          }
 
