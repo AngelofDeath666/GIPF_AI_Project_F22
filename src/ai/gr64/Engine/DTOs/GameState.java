@@ -1,6 +1,42 @@
 package ai.gr64.Engine.DTOs;
 
+import ai.gr64.Data.Enums.Direction;
+import ai.gr64.Data.Interfaces.INode;
+
 public class GameState {
-   public void MakeMove(Move move) {
+   
+   private int whitePiecesLeft, blackPiecesLeft;
+   private INode[] graph, outerNodes;
+
+   public GameState(int startingPieces, INode[] graph, int layers) {
+      this.whitePiecesLeft = startingPieces;
+      this.blackPiecesLeft = startingPieces;
+      this.graph = graph;
+      
+      outerNodes = new INode[(layers+1)*6];
+      outerNodes[0] = graph[0];
+
+      int workingIndex = 0;
+      for (int i = 0; i < 6; i++) {
+         for (int j = 0; j < layers + 1; j++) {
+            workingIndex++;
+            if (workingIndex == outerNodes.length) break; 
+            INode nextNode = outerNodes[workingIndex-1];
+            nextNode = nextNode.neighbour(Direction.fromValue(i+3));
+            nextNode = nextNode.neighbour(Direction.fromValue(i+1));
+
+            outerNodes[workingIndex] = nextNode;
+            
+         }
+
+      }
+      System.out.println("Game state constructed.");
    }
+
+   public void MakeMove(Move move) {
+      throw new Error("Not implemented");
+   }
+
+
+
 }

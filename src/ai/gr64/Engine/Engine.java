@@ -1,20 +1,20 @@
 package ai.gr64.Engine;
 
-import ai.gr64.AI.IMoveGen;
+import ai.gr64.Data.Interfaces.IMoveGen;
+import ai.gr64.Data.Interfaces.IUI;
 import ai.gr64.Engine.DTOs.GameState;
 import ai.gr64.Engine.DTOs.Move;
-import ai.gr64.UI.IUI;
 
 public class Engine {
     private IMoveGen MoveGen1, MoveGen2;
     private IUI UI;
     private GameState state;
 
-    public Engine(IMoveGen moveGen1, IMoveGen moveGen2, IUI ui) {
+    public Engine(IMoveGen moveGen1, IMoveGen moveGen2, IUI ui, GameState state) {
         MoveGen1 = moveGen1;
         MoveGen2 = moveGen2;
         UI = ui;
-        state = new GameState();
+        this.state = state;
     }
     
     public void Run() {
