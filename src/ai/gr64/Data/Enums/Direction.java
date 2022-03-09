@@ -2,6 +2,7 @@ package ai.gr64.Data.Enums;
 
 import java.security.InvalidParameterException;
 
+// Enum to represent directions, also contains method to convert to- and from- an integer value, and getting the opposite direction
 public enum Direction {
     UP_LEFT(0),
     UP_RIGHT(1),

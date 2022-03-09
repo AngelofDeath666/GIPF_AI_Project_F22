@@ -8,6 +8,7 @@ import ai.gr64.Engine.DTOs.GameGraph.InnerNode;
 import ai.gr64.Engine.DTOs.GameState;
 import ai.gr64.Engine.DTOs.GameGraph.OuterNode;
 
+// Static factory-class to construct the GameState
 public class StateFactory {
 
     public static GameState create(int layers, StartingPieces startingMode, int startingPieces) {
@@ -53,22 +54,22 @@ public class StateFactory {
             int size = layerEnds[currentLayer] - layerEnds[currentLayer - 1];
             int upModifier = (currentLayer > layerEnds.length/2 ? 1 : 0);
             int downModifier = (currentLayer >= layerEnds.length/2 ? 1 : 0);
-            if (!nodes[i].hasNeighbour(Direction.LEFT)) {
+            if (!nodes[i].hasNeighbor(Direction.LEFT)) {
                 nodes[i].addNeighbor(nodes[i - 1], Direction.LEFT);
             }
-            if (!nodes[i].hasNeighbour(Direction.RIGHT)) {
+            if (!nodes[i].hasNeighbor(Direction.RIGHT)) {
                 nodes[i].addNeighbor(nodes[i + 1], Direction.RIGHT);
             }
-            if (!nodes[i].hasNeighbour(Direction.UP_LEFT)) {
+            if (!nodes[i].hasNeighbor(Direction.UP_LEFT)) {
                 nodes[i].addNeighbor(nodes[i - size - upModifier], Direction.UP_LEFT);
             }
-            if (!nodes[i].hasNeighbour(Direction.UP_RIGHT)) {
+            if (!nodes[i].hasNeighbor(Direction.UP_RIGHT)) {
                 nodes[i].addNeighbor(nodes[i - size + 1 - upModifier], Direction.UP_RIGHT);
             }
-            if (!nodes[i].hasNeighbour(Direction.DOWN_LEFT)) {
+            if (!nodes[i].hasNeighbor(Direction.DOWN_LEFT)) {
                 nodes[i].addNeighbor(nodes[i + size - downModifier], Direction.DOWN_LEFT);
             }
-            if (!nodes[i].hasNeighbour(Direction.DOWN_RIGHT)) {
+            if (!nodes[i].hasNeighbor(Direction.DOWN_RIGHT)) {
                 nodes[i].addNeighbor(nodes[i + size + 1 - downModifier], Direction.DOWN_RIGHT);
             }
 
@@ -93,7 +94,7 @@ public class StateFactory {
                     INode workingNode = nodes[numNodes / 2];
 
                     for (int j = 0; j < layers; j++) {
-                        workingNode = workingNode.neighbour(Direction.fromValue(i));
+                        workingNode = workingNode.neighbor(Direction.fromValue(i));
                     }
                     if (i % 2 == 0) {
                         workingNode.placePiece(Piece.WHITE);

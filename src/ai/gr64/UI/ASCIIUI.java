@@ -4,6 +4,7 @@ import ai.gr64.Data.Interfaces.IUI;
 import ai.gr64.Engine.DTOs.GameState;
 import ai.gr64.Engine.DTOs.Move;
 
+// To be implemented, should be a text-based user interface
 public class ASCIIUI implements IUI {
 
     @Override
