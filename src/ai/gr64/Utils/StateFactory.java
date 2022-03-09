@@ -101,7 +101,7 @@ public class StateFactory {
                 return i + 1;
             }
         }
-        throw new IndexOutOfBoundsException(); //can't see what this one does, it throws it every time GetLayer is called
+        throw new IndexOutOfBoundsException("Index can't be bigger, than the biggest value in layer ends");
     }
 
     private static boolean OuterNode(int nodeIndex, int[] layerEnds) {
