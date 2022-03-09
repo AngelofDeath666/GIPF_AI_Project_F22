@@ -95,13 +95,13 @@ public class StateFactory {
 
     private static int GetLayer(int nodeIndex, int[] layerEnds) {
         if (nodeIndex < 0)
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException("Index can't be less than 0");
         for (int i = 0; i < layerEnds.length; i++) {
             if (nodeIndex < layerEnds[i]) {
                 return i + 1;
             }
         }
-        throw new IndexOutOfBoundsException();
+        throw new IndexOutOfBoundsException(); //can't see what this one does, it throws it every time GetLayer is called
     }
 
     private static boolean OuterNode(int nodeIndex, int[] layerEnds) {
