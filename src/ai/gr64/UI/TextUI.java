@@ -9,10 +9,24 @@ import ai.gr64.Data.Interfaces.IUI;
 import ai.gr64.Engine.DTOs.GameState;
 import ai.gr64.Engine.DTOs.Move;
 
-public class ASCIIUI implements IUI {
+public class TextUI implements IUI {
+    char whiteGIPF = (char)87;
+    //add whitepices
+    char blackGIPF = (char)66;
+    //add blackpieces
+    char outerSpaces = (char)79;
+    char emptySpaces = (char)215;
+    char linearConnectors = (char)196;
+    char leftDiagConnect = (char)92;
+    char rightDiagConnect = (char)47;
+    char space = (char)32;
+
+    public TextUI(){
+
+    }
     boolean useUnicode = false;
 
-    public ASCIIUI(boolean useUnicode) {
+    public TextUI(boolean useUnicode) {
         if (useUnicode) {
             try {
                 System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out), true, "UTF-8"));
@@ -38,7 +52,7 @@ public class ASCIIUI implements IUI {
     @Override
     public void UpdateUi(GameState state) {
         // TODO Auto-generated method stub
-
+        
     }
-
+    
 }
