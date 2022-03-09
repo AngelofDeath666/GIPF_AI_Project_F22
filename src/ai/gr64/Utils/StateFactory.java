@@ -11,10 +11,15 @@ import ai.gr64.Engine.DTOs.GameGraph.OuterNode;
 public class StateFactory {
 
     public static GameState create(int layers, StartingPieces startingMode, int startingPieces) {
+        //Math expression to calculate how many nodes there will be in total, including the outer nodes on which new pieces are placed
         int numNodes = (((6 + (layers + 1) * 6) * (layers + 1)) / 2) + 1;
         INode[] nodes = new INode[numNodes];
+
+        //layer ends are the 1-indexed index of the last node in each layer/row
         int[] layerEnds = new int[2 * layers + 3];
 
+        //Loop to calculate each of the layer ends
+        //The first has a specific value, and the rest are calculated based on the last value plus the amount of nodes in the current row
         for (int i = 0; i < layerEnds.length; i++) {
             if (i == 0) {
                 layerEnds[0] = layers + 2;
@@ -27,6 +32,8 @@ public class StateFactory {
             }
         }
 
+        //Generates the specific nodes and puts them in the nodes array
+        //uses a method to calculate whether its an outer or inner node
         for (int i = 0; i < numNodes; i++) {
             if (OuterNode(i, layerEnds)) {
                 nodes[i] = new OuterNode();
@@ -36,10 +43,12 @@ public class StateFactory {
             }
         }
 
+        //Loops through all the nodes and adds the neighbors on each side
         for (int i = 0; i < numNodes; i++) {
             if (nodes[i] instanceof OuterNode) {
                 continue;
             }
+            //Some math calculation as diagonal offsets change when the row-width starts to shrink again
             int currentLayer = GetLayer(i, layerEnds) - 1;
             int size = layerEnds[currentLayer] - layerEnds[currentLayer - 1];
             int upModifier = (currentLayer > layerEnds.length/2 ? 1 : 0);
@@ -65,10 +74,20 @@ public class StateFactory {
 
         }
 
+        /*Used to specify the starting mode of the game:
+            None:
+                there will be placed no pieces on the board to start with
+            Normal:
+                in each "corner" of the board, there will be either a black or a white piece
+            Double:
+                in each "corner" of the board there will be a GIPF piece either black or white
+        */
         switch (startingMode) {
+            //No pieces have to be placed
             case NONE:
                 break;
 
+            //Finds each corner and places a normal piece
             case NORMAL:
                 for (int i = 0; i < 6; i++) {
                     INode workingNode = nodes[numNodes / 2];
@@ -83,14 +102,14 @@ public class StateFactory {
                     }
                 }
                 break;
+
+            //As GIPF pieces not are implemented yet, this is mode is yet to be implemented
             case DOUBLE:
                 throw new Error("Handling of Gifp pieces not implemented yet");
         }
 
-        GameState state = new GameState(startingPieces, nodes, layers);
-
-        return state;
-
+        // Generates and returns the final state
+        return new GameState(startingPieces, nodes, layers);
     }
 
     private static int GetLayer(int nodeIndex, int[] layerEnds) {
