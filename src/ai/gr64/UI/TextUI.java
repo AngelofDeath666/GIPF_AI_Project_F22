@@ -1,58 +1,38 @@
 package ai.gr64.UI;
 
-import java.io.FileDescriptor;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
-
+import ai.gr64.Data.Enums.Direction;
 import ai.gr64.Data.Interfaces.IUI;
 import ai.gr64.Engine.DTOs.GameState;
 import ai.gr64.Engine.DTOs.Move;
 
 public class TextUI implements IUI {
-    char whiteGIPF = (char)87;
-    //add whitepices
-    char blackGIPF = (char)66;
-    //add blackpieces
-    char outerSpaces = (char)79;
-    char emptySpaces = (char)215;
-    char linearConnectors = (char)196;
-    char leftDiagConnect = (char)92;
-    char rightDiagConnect = (char)47;
-    char space = (char)32;
+    char whiteGIPF = 'W';
+    char whitePieces = 'w';
+    char blackGIPF = 'B';
+    char blackPieces = 'b';
+    char outerSpaces = 'o';
+    char emptySpaces =(char)215;
+    char linearConnectors = '-';
+    char leftDiagConnect = '\\';
+    char rightDiagConnect = '/';
+    char space = ' ';
 
-    public TextUI(){
-
-    }
-    boolean useUnicode = false;
-
-    public TextUI(boolean useUnicode) {
-        if (useUnicode) {
-            try {
-                System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out), true, "UTF-8"));
-                useUnicode = true;
-            } catch (UnsupportedEncodingException e) {
-                useUnicode = false;
-            }
-        }
-
-        if (this.useUnicode){
-            //set characters
-        } else {
-            //set ascii characters
-        }
-    }
 
     @Override
-    public Move GetPlayerInput() {
-        // TODO Auto-generated method stub
+    public Move GetPlayerInput(boolean player1, Direction dir, int position) {
+
+        /*
+
+        needs to throw an exception if move is illegal.
+
+         */
         return null;
     }
 
     @Override
-    public void UpdateUi(GameState state) {
-        // TODO Auto-generated method stub
-        
+    public void UpdateUi(GameState state, int[] board, int[] blackPiecesIndex, int[] blackGIPFIndex, int[] whitePiecesIndex, int[] whiteGIPFIndex) {
+
     }
-    
+
+
 }
