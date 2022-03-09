@@ -14,6 +14,7 @@ public class Engine {
         MoveGen1 = moveGen1;
         MoveGen2 = moveGen2;
         UI = ui;
+        this.state = state;
     }
     
     public void Run() {
