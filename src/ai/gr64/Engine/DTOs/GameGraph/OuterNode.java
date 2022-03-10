@@ -31,8 +31,11 @@ public class OuterNode implements INode{
     }
 
     // To be implemented, this method is for when a "player" places a piece on the board
-    public void placePiece(Piece piece) {
-        throw new UnsupportedOperationException("To be implemented");
+    @Override
+    public boolean slidePiece(Piece piece, Direction dir) {
+        if (! hasNeighbor(dir)) 
+            return false;
+        slidePiece(neighbor(dir));
     }
 
     // Method to add the given neighbor as a neighbor in the specified direction
