@@ -33,7 +33,6 @@ public class InnerNode implements INode{
     }
 
     // Method to set this space to contain a specific piece, should only be used when creating the board to place the starting-pieces for each player
-    @Override
     public void placePiece(Piece piece) {
         this.piece = piece;
     }

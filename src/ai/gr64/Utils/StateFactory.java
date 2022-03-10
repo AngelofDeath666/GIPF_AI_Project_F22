@@ -97,9 +97,9 @@ public class StateFactory {
                         workingNode = workingNode.neighbor(Direction.fromValue(i));
                     }
                     if (i % 2 == 0) {
-                        workingNode.placePiece(Piece.WHITE);
+                        ((InnerNode)workingNode).placePiece(Piece.WHITE);
                     } else {
-                        workingNode.placePiece(Piece.BLACK);
+                        ((InnerNode)workingNode).placePiece(Piece.BLACK);
                     }
                 }
                 break;
