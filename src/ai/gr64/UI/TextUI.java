@@ -5,6 +5,7 @@ import ai.gr64.Data.Interfaces.IUI;
 import ai.gr64.Engine.DTOs.GameState;
 import ai.gr64.Engine.DTOs.Move;
 
+
 public class TextUI implements IUI {
     char whiteGIPF = 'W';
     char whitePieces = 'w';
