@@ -9,4 +9,22 @@ public class Move {
     private int placementNode;
     private Direction direction;
 
+    public Move(Piece piece, int placementNode, Direction direction) {
+        this.piece = piece;
+        this.placementNode = placementNode;
+        this.direction = direction;
+    }
+
+    public Piece getPiece() {
+        return piece;
+    }
+
+    public int getPlacementNode() {
+        return placementNode;
+    }
+
+    public Direction getDirection() {
+        return direction;
+    }
+
 }
