@@ -21,7 +21,7 @@ public class TextUI implements IUI {
 
     private void PrintWhiteSpaces(int currentLayer, int totalLayers, StringBuilder sb) {
         int middleLayer = totalLayers/2+1;
-        int whiteSpaces = Math.abs(middleLayer-currentLayer);
+        int whiteSpaces = Math.abs(middleLayer-(currentLayer+1));
         for (int i = 0; i < whiteSpaces; i++) {
             sb.append(space);
         }
@@ -50,7 +50,7 @@ public class TextUI implements IUI {
 
     private void PrintConnections(int currentLayer, int[] layerEnds,int totalLayers, StringBuilder sb) {
         int middleLayer = totalLayers/2+1;
-        int nodeCount = currentLayer == 0? layerEnds[0] : layerEnds[currentLayer/2]-layerEnds[currentLayer/2-1];
+        int nodeCount = currentLayer == 1? layerEnds[0] : layerEnds[currentLayer/2]-layerEnds[currentLayer/2-1];
         if (currentLayer < middleLayer) {
             for (int i = 0; i < nodeCount; i++) {
             sb.append(new char[] {i==0? space : rightDiagConnect, space, i == nodeCount-1? space : leftDiagConnect, space});
@@ -58,8 +58,8 @@ public class TextUI implements IUI {
 
             }
         } else {
-            for (int i = 0; i < nodeCount; i++) {
-                sb.append(new char[] {i==0? space : leftDiagConnect, space, i == nodeCount-1? space : rightDiagConnect, space});
+            for (int i = 0; i < nodeCount-1; i++) {
+                sb.append(new char[] {i==0? space : leftDiagConnect, space, i == nodeCount-2? space : rightDiagConnect, space});
             
             }
                 
@@ -97,6 +97,8 @@ public class TextUI implements IUI {
             }
             sb.append('\n');
         }
+
+        System.out.println(sb.toString());
                    
 
 
