@@ -26,12 +26,38 @@ public class TextUI implements IUI {
         }
     }
 
-    private void PrintNodes(StringBuilder sb) {
+    private void PrintNodes(INode[] graph, int index, int currentLayer, int totalLayers, StringBuilder sb) {
+        int middleLayer = totalLayers/2+1;
+        int nodeCount = Math.abs(middleLayer-currentLayer);
+        for (int i = 0; i < whiteSpaces-1; i++) {
+            
+        }
+
         
     }
 
-    private void PrintConnections(StringBuilder sb) {
+    private void PrintConnections(int currentLayer, int totalLayers, StringBuilder sb) {
+        int middleLayer = totalLayers/2+1;
+        int whiteSpaces = Math.abs(middleLayer-currentLayer);
+        if (currentLayer < middleLayer) {
+            for (int i = 0; i < whiteSpaces; i++) {
+            sb.append(rightDiagConnect);
+            sb.append(space);
+            sb.append(leftDiagConnect);
+            sb.append(space);
 
+            }
+        } else {
+            for (int i = 0; i < whiteSpaces; i++) {
+                sb.append(leftDiagConnect);
+                sb.append(space);
+                sb.append(rightDiagConnect);
+                sb.append(space);
+            
+            }
+                
+
+        }
         
     }
 
