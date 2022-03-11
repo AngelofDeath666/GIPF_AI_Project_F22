@@ -11,7 +11,7 @@ public class Main {
 
     public static void main(String[] args) {
         //Generate nessesary resources
-        GameState state = StateFactory.create(6, StartingPieces.NORMAL,15);
+        GameState state = StateFactory.create(3, StartingPieces.NORMAL,15);
         var UI = new TextUI();
         UI.UpdateUi(state);
 

@@ -13,7 +13,7 @@ public class TextUI implements IUI {
     public static final char blackGIPF = 'B';
     public static final char blackPieces = 'b';
     public static final char outerSpaces = 'o';
-    public static final char emptySpaces = (char) 215;
+    public static final char emptySpaces = 'x';
     public static final char linearConnectors = '-';
     public static final char leftDiagConnect = '\\';
     public static final char rightDiagConnect = '/';
