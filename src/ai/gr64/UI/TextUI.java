@@ -5,6 +5,7 @@ import ai.gr64.Data.Interfaces.INode;
 import ai.gr64.Data.Interfaces.IUI;
 import ai.gr64.Engine.DTOs.GameState;
 import ai.gr64.Engine.DTOs.Move;
+import ai.gr64.Utils.BoardUtils;
 
 public class TextUI implements IUI {
     public static final char whiteGIPF = 'W';
@@ -26,33 +27,39 @@ public class TextUI implements IUI {
         }
     }
 
-    private void PrintNodes(INode[] graph, int index, int currentLayer, int totalLayers, StringBuilder sb) {
-        int middleLayer = totalLayers/2+1;
-        int nodeCount = Math.abs(middleLayer-currentLayer);
-        for (int i = 0; i < whiteSpaces-1; i++) {
+    private void PrintNodes(INode[] graph, int[] layerEnds, int currentLayer, StringBuilder sb) {
+        
+        int nodeCount = currentLayer == 0? layerEnds[0] : layerEnds[currentLayer/2]-layerEnds[currentLayer/2-1];
+        for (int i = layerEnds[currentLayer/2]- nodeCount; i < layerEnds[currentLayer/2]; i++) {
+            if (i != layerEnds[currentLayer/2]- nodeCount) {
+               
+                if (currentLayer != 0 && currentLayer/2 != layerEnds.length-1) {
+                    sb.append(new char[] {linearConnectors,linearConnectors,linearConnectors});
+                } else {
+                    sb.append(new char[] {space, space, space});
+                }
+
+            }
+
             
+            sb.append(graph[i].getNodeChar());
         }
 
         
     }
 
-    private void PrintConnections(int currentLayer, int totalLayers, StringBuilder sb) {
+    private void PrintConnections(int currentLayer, int[] layerEnds,int totalLayers, StringBuilder sb) {
         int middleLayer = totalLayers/2+1;
-        int whiteSpaces = Math.abs(middleLayer-currentLayer);
+        int nodeCount = currentLayer == 0? layerEnds[0] : layerEnds[currentLayer/2]-layerEnds[currentLayer/2-1];
         if (currentLayer < middleLayer) {
-            for (int i = 0; i < whiteSpaces; i++) {
-            sb.append(rightDiagConnect);
-            sb.append(space);
-            sb.append(leftDiagConnect);
-            sb.append(space);
+            for (int i = 0; i < nodeCount; i++) {
+            sb.append(new char[] {i==0? space : rightDiagConnect, space, i == nodeCount-1? space : leftDiagConnect, space});
+            
 
             }
         } else {
-            for (int i = 0; i < whiteSpaces; i++) {
-                sb.append(leftDiagConnect);
-                sb.append(space);
-                sb.append(rightDiagConnect);
-                sb.append(space);
+            for (int i = 0; i < nodeCount; i++) {
+                sb.append(new char[] {i==0? space : leftDiagConnect, space, i == nodeCount-1? space : rightDiagConnect, space});
             
             }
                 
@@ -79,9 +86,17 @@ public class TextUI implements IUI {
         INode[] graph = state.getGraph();
         int layers = (state.layers*2+3)*2-1;
         StringBuilder sb = new StringBuilder();
-        //GameState.graph for the array 0 indexed
-
-        //implement a graph array conversion from int to char
+        int[] layerEnds = BoardUtils.LayerEnds(state.layers);
+        
+        for (int i = 0; i < layers; i++) {
+            PrintWhiteSpaces(i, layers, sb);
+            if (i % 2 == 0) {
+                PrintNodes(graph, layerEnds, i, sb);
+            } else {
+                PrintConnections(i, layerEnds, layers, sb);
+            }
+            sb.append('\n');
+        }
                    
 
 
