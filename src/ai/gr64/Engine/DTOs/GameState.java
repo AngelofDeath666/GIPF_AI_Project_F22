@@ -36,10 +36,9 @@ public class GameState {
       }
    }
 
-   // To be implemented, the method called when making a move on the board,
-   public void MakeMove(Move move) {
-
-       ((OuterNode)outerNodes[move.getPlacementNode()]).placePiece(move.getPiece(), move.getDirection());;
+   // The method called when making a move on the board
+   public boolean MakeMove(Move move) {
+       return ((OuterNode)outerNodes[move.getPlacementNode()]).slidePiece(move.getPiece(), move.getDirection());
     }
 
 }
