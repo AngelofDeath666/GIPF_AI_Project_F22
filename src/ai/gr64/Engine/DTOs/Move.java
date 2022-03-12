@@ -15,6 +15,10 @@ public class Move {
         this.direction = direction;
     }
 
+    public void setPiece(Piece piece) {
+        this.piece = piece;
+    }
+
     public Piece getPiece() {
         return piece;
     }

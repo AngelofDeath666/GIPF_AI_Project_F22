@@ -50,6 +50,13 @@ public class InnerNode implements INode{
         return false;
     }
 
+    @Override
+    public boolean movePossible(Direction dir) {
+        if (this.piece == Piece.NONE || this.piece == null)
+            return true;
+        return neighbor(dir).movePossible(dir);
+    }
+
     // Method to add a neighbor without adding this as a neighbor to the other node
     // Required to not get infinite loops when establishing the two-way connections
     @Override

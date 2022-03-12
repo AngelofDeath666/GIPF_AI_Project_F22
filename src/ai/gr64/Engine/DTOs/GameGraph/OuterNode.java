@@ -38,6 +38,14 @@ public class OuterNode implements INode{
         return neighbor(dir).slidePiece(piece, dir);
     }
 
+    // Returns whether sliding a piece in the direction dir is possible
+    @Override
+    public boolean movePossible(Direction dir) {
+        if (hasNeighbor(dir))
+            return neighbor(dir).movePossible(dir);
+        return false;
+    }
+
     // Method to add the given neighbor as a neighbor in the specified direction
     // Is invoked when addNeighbor is invoked on an innerNode adjacent to this node so a two-way connection is established
     @Override

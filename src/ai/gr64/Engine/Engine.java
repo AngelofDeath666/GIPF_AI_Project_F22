@@ -25,7 +25,7 @@ public class Engine {
         while (turn < 10000) {
             // Run Game
             var move = turn % 2 == 0 ? MoveGen1.NextMove(state) : MoveGen2.NextMove(state);
-            if (!state.MakeMove(move))
+            if (!state.makeMove(move))
                 break;
             turn++;
         }
