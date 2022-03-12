@@ -7,15 +7,13 @@ import ai.gr64.Engine.DTOs.GameGraph.OuterNode;
 // The GameState, containing information about how the game is looking at this point in time
 // Has information about, the board, how many pieces each player has left, etc.
 public class GameState {
-    private int whitePiecesLeft, blackPiecesLeft;
-    private INode[] graph, outerNodes;
-    public final int layers;
+   private int whitePiecesLeft, blackPiecesLeft;
+   private INode[] graph, outerNodes;
 
-    public GameState(int startingPieces, INode[] graph, int layers) {
-        this.whitePiecesLeft = startingPieces;
-        this.blackPiecesLeft = startingPieces;
-        this.graph = graph;
-        this.layers = layers;
+   public GameState(int startingPieces, INode[] graph, int layers) {
+      this.whitePiecesLeft = startingPieces;
+      this.blackPiecesLeft = startingPieces;
+      this.graph = graph;
 
       // An array containing all the outer-nodes on the board, sorted starting with
       // the top-left, going clockwise.
@@ -43,10 +41,6 @@ public class GameState {
         if (move.getPlacementNode() >= outerNodes.length)
             throw new IndexOutOfBoundsException("The placement-node of move must be non-negative and lower then the number of outer nodes on the board");
         return ((OuterNode)outerNodes[move.getPlacementNode()]).slidePiece(move.getPiece(), move.getDirection());
-    }
-
-    public INode[] getGraph() {
-        return graph;
     }
 
 }
