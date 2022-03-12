@@ -38,7 +38,9 @@ public class GameState {
 
    // The method called when making a move on the board
    public boolean MakeMove(Move move) {
-       return ((OuterNode)outerNodes[move.getPlacementNode()]).slidePiece(move.getPiece(), move.getDirection());
+        if (move.getPlacementNode() >= outerNodes.length)
+            throw new IndexOutOfBoundsException("The placement-node of move must be non-negative and lower then the number of outer nodes on the board");
+        return ((OuterNode)outerNodes[move.getPlacementNode()]).slidePiece(move.getPiece(), move.getDirection());
     }
 
 }
