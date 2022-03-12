@@ -9,8 +9,7 @@ import ai.gr64.Engine.DTOs.Move;
 
 public class BoardUtils {
 
-    // To be implemented, should return an array of all possible moves to be made
-    // based on the given GameState
+    // Returns all possible moves to that can be made, only legal moves are included
     public static Move[] GetAllMoves(GameState state) {
         List<Move> moves = new ArrayList<>();
         Move newMove;

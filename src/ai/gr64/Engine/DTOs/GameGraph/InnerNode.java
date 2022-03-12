@@ -37,6 +37,8 @@ public class InnerNode implements INode{
         this.piece = piece;
     }
 
+    // Sets this pice to the given pice, and slides the current piece on the next node, if there was a current piece
+    // Checks that the piece can actually be slid on before updating, returns false if it would end up being an illegal move 
     @Override
     public boolean slidePiece(Piece piece, Direction dir) {
         if (this.piece == Piece.NONE) {
@@ -50,6 +52,7 @@ public class InnerNode implements INode{
         return false;
     }
 
+    // Check whether it is possible to make a move from an outerNode going through this node and sliding on if there is a piece on this node
     @Override
     public boolean movePossible(Direction dir) {
         if (this.piece == Piece.NONE || this.piece == null)
