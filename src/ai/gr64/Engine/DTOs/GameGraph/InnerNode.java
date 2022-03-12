@@ -56,6 +56,12 @@ public class InnerNode implements INode{
     public void addOneWayNeighbor(INode node, Direction dir) {
         neighbors[dir.getValue()] = node;
     }
+
+    @Override
+    public char getNodeChar() {
+        return Piece.getPieceChar(piece);
+        
+    }
 }
 
 

@@ -20,7 +20,7 @@ public class GUI implements IUI {
     }
 
     @Override
-    public void UpdateUi(GameState state, int[] board, int[] blackPiecesIndex, int[] blackGIPFIndex, int[] whitePiecesIndex, int[] whiteGIPFIndex) {
+    public void UpdateUi(GameState state) {
 
     }
 

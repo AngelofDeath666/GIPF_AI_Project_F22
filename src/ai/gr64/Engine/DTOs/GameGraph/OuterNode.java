@@ -3,6 +3,7 @@ package ai.gr64.Engine.DTOs.GameGraph;
 import ai.gr64.Data.Enums.Direction;
 import ai.gr64.Data.Enums.Piece;
 import ai.gr64.Data.Interfaces.INode;
+import ai.gr64.UI.TextUI;
 
 // Class representing an OuterNode
 // An outer node is one of the outer-most spaces on the game board where a player can place a game piece, counterpart to the inner-nodes
@@ -44,4 +45,10 @@ public class OuterNode implements INode{
     public void addOneWayNeighbor(INode node, Direction dir) {
         neighbors[dir.getValue()] = node;
     }
+
+    @Override
+    public char getNodeChar() {
+        return TextUI.outerSpaces;
+    }
+
 }

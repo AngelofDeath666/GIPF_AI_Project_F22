@@ -22,11 +22,13 @@ public class Engine {
     // over, and who won.
     public void Run() {
         int turn = 0;
+        UI.UpdateUi(state);
         while (turn < 10000) {
             // Run Game
             var move = turn % 2 == 0 ? MoveGen1.NextMove(state) : MoveGen2.NextMove(state);
             if (!state.MakeMove(move))
                 break;
+            UI.UpdateUi(state);
             turn++;
         }
         System.out.println("Stopped at turn: " + turn);
