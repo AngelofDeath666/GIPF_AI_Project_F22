@@ -4,6 +4,7 @@ import ai.gr64.Data.Interfaces.INode;
 import ai.gr64.Data.Interfaces.IUI;
 import ai.gr64.Engine.DTOs.GameState;
 import ai.gr64.Engine.DTOs.Move;
+import ai.gr64.Utils.BoardUtils;
 
 public class TextUI implements IUI {
     // These variables are the characters being used in the TextUI
@@ -101,6 +102,5 @@ public class TextUI implements IUI {
         System.out.println(sb.toString());
 
     }
-
 
 }

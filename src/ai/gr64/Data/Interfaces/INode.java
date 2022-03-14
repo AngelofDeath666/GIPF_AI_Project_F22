@@ -11,4 +11,5 @@ public interface INode {
     INode neighbor(Direction dir);
     boolean movePossible(Direction dir);
     boolean slidePiece(Piece piece, Direction dir);
+    char getNodeChar();
 }

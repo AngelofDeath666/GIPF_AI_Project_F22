@@ -2,7 +2,6 @@ package ai.gr64.Engine.DTOs;
 
 import ai.gr64.Data.Enums.Direction;
 import ai.gr64.Data.Interfaces.INode;
-import ai.gr64.Engine.DTOs.GameGraph.OuterNode;
 
 // The GameState, containing information about how the game is looking at this point in time
 // Has information about, the board, how many pieces each player has left, etc.
@@ -38,6 +37,10 @@ public class GameState {
         }
     }
 
+    public INode[] getGraph() {
+        return graph;
+    }
+
     // The method called when making a move on the board
     public boolean makeMove(Move move) {
         if (move.getPlacementNode() >= outerNodes.length)
@@ -49,5 +52,4 @@ public class GameState {
     public boolean movePossible(Move move) {
         return outerNodes[move.getPlacementNode()].movePossible(move.getDirection());
     }
-
 }
