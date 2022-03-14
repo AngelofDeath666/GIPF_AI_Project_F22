@@ -25,6 +25,7 @@ public class Engine {
            // Run Game 
            var move = turn % 2 == 0 ? MoveGen1.NextMove(state) : MoveGen2.NextMove(state);
            state.MakeMove(move);
+           UI.UpdateUi(state);
            turn++;
         }
     }

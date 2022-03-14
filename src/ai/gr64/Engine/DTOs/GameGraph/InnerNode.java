@@ -10,7 +10,7 @@ public class InnerNode implements INode{
     // All neighbors to this node, each inner-node will have 6 neighbors with there index corresponding to the value in the Direction-enum
     private INode[] neighbors = new INode[6];
     // Which piece is placed on this space
-    private Piece piece;
+    private Piece piece = Piece.NONE;
     
     // Method to add a neighbor for a specific direction, it invokes addOneWayNeighbor on the other node to establish a two-way direction
     @Override
@@ -43,6 +43,12 @@ public class InnerNode implements INode{
     @Override
     public void addOneWayNeighbor(INode node, Direction dir) {
         neighbors[dir.getValue()] = node;
+    }
+
+    @Override
+    public char getNodeChar() {
+        return Piece.getPieceChar(piece);
+        
     }
 }
 

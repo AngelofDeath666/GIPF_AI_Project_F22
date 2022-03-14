@@ -9,14 +9,12 @@ public class GUI implements IUI {
 
     @Override
     public Move GetPlayerInput() {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException("Not implemented.");
     }
 
     @Override
     public void UpdateUi(GameState state) {
-        // TODO Auto-generated method stub
-        
+
     }
-    
+
 }

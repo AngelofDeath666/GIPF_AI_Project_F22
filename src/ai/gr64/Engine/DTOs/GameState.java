@@ -8,11 +8,13 @@ import ai.gr64.Data.Interfaces.INode;
 public class GameState {
     private int whitePiecesLeft, blackPiecesLeft;
     private INode[] graph, outerNodes;
+    public final int layers;
 
     public GameState(int startingPieces, INode[] graph, int layers) {
         this.whitePiecesLeft = startingPieces;
         this.blackPiecesLeft = startingPieces;
         this.graph = graph;
+        this.layers = layers;
 
         // An array containing all the outer-nodes on the board, sorted starting with
         // the top-left, going clockwise.
@@ -34,6 +36,11 @@ public class GameState {
             }
         }
     }
+
+    public INode[] getGraph() {
+        return graph;
+    }
+
 
     // To be implemented, the method called when making a move on the board,
     public void MakeMove(Move move) {
