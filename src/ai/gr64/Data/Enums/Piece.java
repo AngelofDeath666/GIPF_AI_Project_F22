@@ -1,6 +1,6 @@
 package ai.gr64.Data.Enums;
 
-import ai.gr64.UI.TextUI;
+import ai.gr64.Data.Statics.TextStatics;
 
 public enum Piece {
     NONE,
@@ -12,15 +12,15 @@ public enum Piece {
     public static char getPieceChar(Piece piece) {
         switch (piece) {
             case NONE:
-                return TextUI.emptySpaces;
+                return TextStatics.emptySpaces;
             case WHITE:
-                return TextUI.whitePieces;
+                return TextStatics.whitePieces;
             case BLACK:
-                return TextUI.blackPieces;
+                return TextStatics.blackPieces;
             case GIPFWHITE:
-                return TextUI.whiteGIPF;
+                return TextStatics.whiteGIPF;
             case GIPFBLACK:
-                return TextUI.blackGIPF;
+                return TextStatics.blackGIPF;
             default:
                 throw new IllegalArgumentException("An unhandled piece was given as an argument.");
         }
