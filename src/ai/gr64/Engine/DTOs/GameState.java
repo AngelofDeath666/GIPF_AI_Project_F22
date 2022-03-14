@@ -41,10 +41,15 @@ public class GameState {
         return graph;
     }
 
-
-    // To be implemented, the method called when making a move on the board,
-    public void MakeMove(Move move) {
-        throw new Error("Not implemented");
+    // The method called when making a move on the board
+    public boolean makeMove(Move move) {
+        if (move.getPlacementNode() >= outerNodes.length)
+            throw new IndexOutOfBoundsException(
+                    "The placement-node of move must be non-negative and lower then the number of outer nodes on the board");
+        return outerNodes[move.getPlacementNode()].slidePiece(move.getPiece(), move.getDirection());
     }
 
+    public boolean movePossible(Move move) {
+        return outerNodes[move.getPlacementNode()].movePossible(move.getDirection());
+    }
 }

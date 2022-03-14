@@ -33,9 +33,31 @@ public class InnerNode implements INode{
     }
 
     // Method to set this space to contain a specific piece, should only be used when creating the board to place the starting-pieces for each player
-    @Override
     public void placePiece(Piece piece) {
         this.piece = piece;
+    }
+
+    // Sets this pice to the given pice, and slides the current piece on the next node, if there was a current piece
+    // Checks that the piece can actually be slid on before updating, returns false if it would end up being an illegal move 
+    @Override
+    public boolean slidePiece(Piece piece, Direction dir) {
+        if (this.piece == Piece.NONE) {
+            this.piece = piece;
+            return true;
+        }
+        if (neighbor(dir).slidePiece(this.piece, dir)) {
+            this.piece = piece;
+            return true;
+        }
+        return false;
+    }
+
+    // Check whether it is possible to make a move from an outerNode going through this node and sliding on if there is a piece on this node
+    @Override
+    public boolean movePossible(Direction dir) {
+        if (this.piece == Piece.NONE || this.piece == null)
+            return true;
+        return neighbor(dir).movePossible(dir);
     }
 
     // Method to add a neighbor without adding this as a neighbor to the other node
@@ -48,7 +70,6 @@ public class InnerNode implements INode{
     @Override
     public char getNodeChar() {
         return Piece.getPieceChar(piece);
-        
     }
 }
 

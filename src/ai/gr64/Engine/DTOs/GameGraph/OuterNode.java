@@ -31,10 +31,20 @@ public class OuterNode implements INode{
         return neighbors[dir.getValue()];
     }
 
-    // To be implemented, this method is for when a "player" places a piece on the board
+    // The method called when a player is making a move
     @Override
-    public void placePiece(Piece piece) {
-        throw new UnsupportedOperationException("To be implemented");
+    public boolean slidePiece(Piece piece, Direction dir) {
+        if (! hasNeighbor(dir)) 
+            return false;
+        return neighbor(dir).slidePiece(piece, dir);
+    }
+
+    // Returns whether sliding a piece in the direction dir is possible
+    @Override
+    public boolean movePossible(Direction dir) {
+        if (hasNeighbor(dir))
+            return neighbor(dir).movePossible(dir);
+        return false;
     }
 
     // Method to add the given neighbor as a neighbor in the specified direction

@@ -9,6 +9,7 @@ public interface INode {
     void addOneWayNeighbor(INode node, Direction dir);
     boolean hasNeighbor(Direction dir);
     INode neighbor(Direction dir);
-    void placePiece(Piece piece);
+    boolean movePossible(Direction dir);
+    boolean slidePiece(Piece piece, Direction dir);
     char getNodeChar();
 }
