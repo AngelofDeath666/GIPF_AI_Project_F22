@@ -12,6 +12,10 @@ public class OuterNode implements INode{
     // Based on the Direction-enum, where up-left is 0 and going clockwise as it increases
     private INode[] neighbors = new INode[6];
 
+
+    // Variable for the index of the outer node 
+    private int outerIndex;
+
     // Method to add a neighbor to a specific direction
     // This should never be called on an outer node in order to assure outer-nodes are only connected to inner-nodes, and not other outer nodes
     @Override
@@ -59,8 +63,12 @@ public class OuterNode implements INode{
         return TextStatics.outerSpaces;
     }
 
-    @Override
-    public int getIndex() {
-        
+    public int getOuterIndex() {
+        return outerIndex;
     }
+
+    public void setOuterIndex(int outerIndex) {
+        this.outerIndex = outerIndex;
+    }
+
 }

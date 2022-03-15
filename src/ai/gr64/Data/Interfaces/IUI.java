@@ -5,7 +5,7 @@ import ai.gr64.Engine.DTOs.Move;
 
 // Interface for all implementations of a User-Interface
 public interface IUI {
-    public Move GetPlayerInput();
+    public Move GetPlayerInput(GameState state);
 
     public void UpdateUi(GameState state);
 

@@ -2,6 +2,7 @@ package ai.gr64.UI;
 
 import java.util.Scanner;
 
+import ai.gr64.Data.Enums.Direction;
 import ai.gr64.Data.Enums.Piece;
 import ai.gr64.Data.Interfaces.INode;
 import ai.gr64.Data.Interfaces.IUI;
@@ -49,6 +50,7 @@ public class TextUI implements IUI {
             }
 
             sb.append(graph[i].getNodeChar());
+
         }
 
     }
@@ -75,15 +77,12 @@ public class TextUI implements IUI {
 
     }
 
-    public HandleInput(String startPosition, String endPosition) {
-
-    }
 
     @Override
-    public Move GetPlayerInput() {
+    public Move GetPlayerInput(GameState state) {
 
         int position = -1;
-        while (position == -1) position = getValidNodePosition();
+        while (position == -1) position = getValidNodePosition(state);
 
         Direction dir = getValidDirection(position);
 
@@ -98,12 +97,12 @@ public class TextUI implements IUI {
         return Direction.
     }
 
-    private int getValidNodePosition() {
+    private int getValidNodePosition(GameState state) {
         String node = scan.nextLine();
         int position = -1;
-
-        //validate node
+        INode[] graph = state.getGraph();
         
+        //validate node
         if (!valid) {
             return -1;
         }
