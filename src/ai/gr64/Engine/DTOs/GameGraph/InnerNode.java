@@ -1,5 +1,8 @@
 package ai.gr64.Engine.DTOs.GameGraph;
 
+import java.util.Collection;
+import java.util.List;
+
 import ai.gr64.Data.Enums.Direction;
 import ai.gr64.Data.Enums.Piece;
 import ai.gr64.Data.Interfaces.INode;
@@ -40,12 +43,16 @@ public class InnerNode implements INode{
     // Sets this pice to the given pice, and slides the current piece on the next node, if there was a current piece
     // Checks that the piece can actually be slid on before updating, returns false if it would end up being an illegal move 
     @Override
-    public boolean slidePiece(Piece piece, Direction dir) {
+    public boolean slidePiece(Piece piece, Direction dir, List<InnerNode> changedNodes) {
         if (this.piece == Piece.NONE) {
             this.piece = piece;
+            changedNodes.add(this);
             return true;
         }
-        if (neighbor(dir).slidePiece(this.piece, dir)) {
+        if (neighbor(dir).slidePiece(this.piece, dir, changedNodes)) {
+            if (this.piece != piece) {
+                changedNodes.add(this);
+            }
             this.piece = piece;
             return true;
         }
@@ -70,6 +77,15 @@ public class InnerNode implements INode{
     @Override
     public char getNodeChar() {
         return Piece.getPieceChar(piece);
+    }
+
+    public Collection<CompletedRow> rowsCompleted() {
+
+        return null;
+    }
+
+    private CompletedRow directionalRow(Direction dir) {
+        
     }
 }
 

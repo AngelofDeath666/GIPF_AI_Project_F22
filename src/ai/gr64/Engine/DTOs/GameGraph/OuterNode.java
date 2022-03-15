@@ -1,5 +1,7 @@
 package ai.gr64.Engine.DTOs.GameGraph;
 
+import java.util.List;
+
 import ai.gr64.Data.Enums.Direction;
 import ai.gr64.Data.Enums.Piece;
 import ai.gr64.Data.Interfaces.INode;
@@ -33,10 +35,10 @@ public class OuterNode implements INode{
 
     // The method called when a player is making a move
     @Override
-    public boolean slidePiece(Piece piece, Direction dir) {
+    public boolean slidePiece(Piece piece, Direction dir, List<InnerNode> changedNodes) {
         if (! hasNeighbor(dir)) 
             return false;
-        return neighbor(dir).slidePiece(piece, dir);
+        return neighbor(dir).slidePiece(piece, dir, changedNodes);
     }
 
     // Returns whether sliding a piece in the direction dir is possible

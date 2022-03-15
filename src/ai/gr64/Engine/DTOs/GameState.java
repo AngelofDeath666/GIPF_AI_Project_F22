@@ -1,7 +1,12 @@
 package ai.gr64.Engine.DTOs;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ai.gr64.Data.Enums.Direction;
 import ai.gr64.Data.Interfaces.INode;
+import ai.gr64.Engine.DTOs.GameGraph.CompletedRow;
+import ai.gr64.Engine.DTOs.GameGraph.InnerNode;
 
 // The GameState, containing information about how the game is looking at this point in time
 // Has information about, the board, how many pieces each player has left, etc.
@@ -9,6 +14,7 @@ public class GameState {
     private int whitePiecesLeft, blackPiecesLeft;
     private INode[] graph, outerNodes;
     public final int layers;
+    private List<InnerNode> changedNodes = new ArrayList<>();
 
     public GameState(int startingPieces, INode[] graph, int layers) {
         this.whitePiecesLeft = startingPieces;
@@ -35,6 +41,8 @@ public class GameState {
                 outerNodes[workingIndex] = nextNode;
             }
         }
+
+
     }
 
     public INode[] getGraph() {
@@ -46,10 +54,19 @@ public class GameState {
         if (move.getPlacementNode() >= outerNodes.length)
             throw new IndexOutOfBoundsException(
                     "The placement-node of move must be non-negative and lower then the number of outer nodes on the board");
-        return outerNodes[move.getPlacementNode()].slidePiece(move.getPiece(), move.getDirection());
+        return outerNodes[move.getPlacementNode()].slidePiece(move.getPiece(), move.getDirection(), changedNodes);
+
     }
 
     public boolean movePossible(Move move) {
         return outerNodes[move.getPlacementNode()].movePossible(move.getDirection());
+    }
+
+    private void rowsCompleted() {
+        List<CompletedRow> completedRows = new ArrayList<>();
+        for (InnerNode innerNode : changedNodes) {
+            completedRows.addAll(innerNode.rowsCompleted());
+        }
+
     }
 }
