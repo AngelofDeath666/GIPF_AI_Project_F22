@@ -11,52 +11,31 @@ import ai.gr64.Engine.DTOs.GameState;
 import ai.gr64.Engine.DTOs.Move;
 import ai.gr64.Utils.BoardUtils;
 
-
 public class TextUI implements IUI {
-    
-    
+
     private static final Scanner scan = new Scanner(System.in);
     public static String startPosition;
     public static String endPosition;
 
-    public static int[] LettersArray(int totalLayers) {
-        int letterLayers = totalLayers / 2 + 1;
-        int []letters = new int[letterLayers];
-        //the int for A
-        int number = 65;
-        
-        //takes the int values for the letters and add them to letters[]
-        for (int i = 0; i < letterLayers; i++) {
-            letters[i] = number;
-            number++;            
-        }
-
-        return letters;
-    }
-
-    private void PrintCoordinatesEnds(int currentLayer, int[] layerEnds, int[] letters) {
-        int nodeCount = currentLayer == 1 ? layerEnds[0]
+    private void PrintCoordinatesEnds(int currentLayer, int[] layerEnds, StringBuilder sb) {
+        int nodeCount = currentLayer == 0 ? layerEnds[0]
                 : layerEnds[currentLayer / 2] - layerEnds[currentLayer / 2 - 1];
 
-        System.out.println(letters[currentLayer] + nodeCount);
-        
-        
+        sb.append(" " + String.valueOf((char) (97 + (currentLayer / 2))) + nodeCount);
+
     }
 
-    private void PrintCoordinatesStart(int currentLayer, int[] letters) {
-        System.out.println(letters[currentLayer] + "1");
-        
-        
-    }
-    
+    private void PrintCoordinatesStart(int currentLayer, StringBuilder sb) {
+        sb.append(((char) (97 + (currentLayer / 2))) + "1 ");
 
+    }
 
     // This method calculates the amount of white spaces needed and appends them to
     // the StringBuilder
     private void PrintWhiteSpaces(int currentLayer, int totalLayers, StringBuilder sb) {
         int middleLayer = totalLayers / 2 + 1;
         int whiteSpaces = Math.abs(middleLayer - (currentLayer + 1));
-        for (int i = 0; i < whiteSpaces; i++) {
+        for (int i = 0; i < whiteSpaces + (currentLayer % 2 == 0 ? 0 : 3); i++) {
             sb.append(TextStatics.space);
         }
     }
@@ -72,7 +51,8 @@ public class TextUI implements IUI {
             if (i != layerEnds[currentLayer / 2] - nodeCount) {
 
                 if (currentLayer != 0 && currentLayer / 2 != layerEnds.length - 1) {
-                    sb.append(new char[] { TextStatics.linearConnectors, TextStatics.linearConnectors, TextStatics.linearConnectors });
+                    sb.append(new char[] { TextStatics.linearConnectors, TextStatics.linearConnectors,
+                            TextStatics.linearConnectors });
                 } else {
                     sb.append(new char[] { TextStatics.space, TextStatics.space, TextStatics.space });
                 }
@@ -107,33 +87,32 @@ public class TextUI implements IUI {
 
     }
 
-
     @Override
     public Move GetPlayerInput(GameState state) {
 
         int position = -1;
-        while (position == -1) position = getValidNodePosition(state);
+        while (position == -1)
+            position = getValidNodePosition(state);
 
         Direction dir = getValidDirection(position);
 
         return new Move(Piece.NONE, position, dir);
 
-        
     }
 
-    /* private Direction getValidDirection(int position) {
-        //validate and return
+    private Direction getValidDirection(int position) {
+        // validate and return
 
-        return Direction.
-    } */
+        return Direction.LEFT;
+    }
 
     private int getValidNodePosition(GameState state) {
         String node = scan.nextLine();
         int position = -1;
         INode[] graph = state.getGraph();
         boolean valid = false;
-        
-        //validate node
+
+        // validate node
         if (!valid) {
             return -1;
         }
@@ -150,21 +129,19 @@ public class TextUI implements IUI {
         int layers = (state.layers * 2 + 3) * 2 - 1;
         StringBuilder sb = new StringBuilder();
         int[] layerEnds = BoardUtils.LayerEnds(state.layers);
-        int[] letters = LettersArray(layers);
 
         for (int i = 0; i < layers; i++) {
-            PrintCoordinatesStart(i, letters);
             PrintWhiteSpaces(i, layers, sb);
             if (i % 2 == 0) {
+                PrintCoordinatesStart(i, sb);
                 PrintNodes(graph, layerEnds, i, sb);
+                PrintCoordinatesEnds(i, layerEnds, sb);
             } else {
                 PrintConnections(i, layerEnds, layers, sb);
             }
-            PrintWhiteSpaces(i, layers, sb);
-            PrintCoordinatesEnds(i, layerEnds, letters);
             sb.append('\n');
         }
-        
+
         System.out.println(sb.toString());
         System.out.println("\n\n\n" + TextStatics.messageP1 + TextStatics.messageOuterNode);
 
