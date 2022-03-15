@@ -3,7 +3,7 @@ package ai.gr64.UI;
 import ai.gr64.Data.Interfaces.INode;
 import ai.gr64.Data.Interfaces.IUI;
 import ai.gr64.Engine.DTOs.GameState;
-import ai.gr64.Engine.DTOs.Move;
+import ai.gr64.Engine.DTOs.Actions.Move;
 import ai.gr64.Utils.BoardUtils;
 
 public class TextUI implements IUI {

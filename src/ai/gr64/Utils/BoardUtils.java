@@ -7,7 +7,7 @@ import java.util.Map;
 
 import ai.gr64.Data.Enums.Direction;
 import ai.gr64.Engine.DTOs.GameState;
-import ai.gr64.Engine.DTOs.Move;
+import ai.gr64.Engine.DTOs.Actions.Move;
 
 public class BoardUtils {
     // Returns all possible moves to that can be made, only legal moves are included

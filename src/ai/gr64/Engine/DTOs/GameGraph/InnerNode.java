@@ -1,11 +1,14 @@
 package ai.gr64.Engine.DTOs.GameGraph;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import ai.gr64.Data.Enums.Direction;
 import ai.gr64.Data.Enums.Piece;
 import ai.gr64.Data.Interfaces.INode;
+import ai.gr64.Data.Statics.GameSettings;
+import ai.gr64.Engine.DTOs.Actions.ClearRow;
 
 // Class representing an OuterNode
 // An inner node is one of the spaces on the board which is not on the edge, and where pieces stay between turns. A counterpart to the outer-nodes
@@ -79,15 +82,58 @@ public class InnerNode implements INode{
         return Piece.getPieceChar(piece);
     }
 
-    public Collection<CompletedRow> rowsCompleted() {
+    //Find all the completed rows this node is a part of
+    public Collection<ClearRow> rowsCompleted() {
+        List<ClearRow> rows = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            ClearRow row = directionalRow(Direction.fromValue(i));
+            if (row != null)
+                rows.add(row);
+        }
+        return rows;
+    }
 
+    //Finds whether this row is completed in a specific direction
+    private ClearRow directionalRow(Direction dir) {
+        int dir1 = 0, dir2 = 0;
+        if (neighbor(dir) instanceof InnerNode node)
+            dir1 = node.samePieceInARow(dir, this.piece);
+        if (neighbor(Direction.opposite(dir)) instanceof InnerNode node)
+            dir2 = node.samePieceInARow(Direction.opposite(dir), this.piece);
+        if (1 + dir1 + dir2 >= GameSettings.NumberInARowToClear) {
+            INode sourceNode = neighbor(dir);
+            while (sourceNode instanceof InnerNode) {
+                sourceNode = sourceNode.neighbor(dir);
+            }
+            // return new ClearRow();
+        }
         return null;
     }
 
-    private CompletedRow directionalRow(Direction dir) {
-        
+    // Finds how many of the same piece there is in a row in the given direction
+    public int samePieceInARow(Direction dir, Piece piece) {
+        if (this.piece != piece)
+            return 0;
+        if (neighbor(dir) instanceof InnerNode innerNode)
+            return 1 + innerNode.samePieceInARow(dir, piece);
+        return 1;
+    }
+
+    @Override
+    public List<Piece> getRow(Direction dir, List<Piece> row) {
+        row.add(this.piece);
+        return neighbor(dir).getRow(dir, row);
+    }
+
+    @Override
+    public void setRow(Direction dir, List<Piece> row) {
+        this.piece = row.remove(0);
+        neighbor(dir).setRow(dir, row);
+    }
+
+    @Override
+    public void clearRow(Direction dir) {
+        this.piece = Piece.NONE;
+        neighbor(dir).clearRow(dir);
     }
 }
-
-
-

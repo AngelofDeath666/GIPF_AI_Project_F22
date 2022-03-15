@@ -4,7 +4,7 @@ import ai.gr64.Data.Enums.Direction;
 import ai.gr64.Data.Enums.Piece;
 import ai.gr64.Data.Interfaces.IMoveGen;
 import ai.gr64.Engine.DTOs.GameState;
-import ai.gr64.Engine.DTOs.Move;
+import ai.gr64.Engine.DTOs.Actions.Move;
 
 //To be implemented, an AI choosing moves at random
 public class RandomAI implements IMoveGen {

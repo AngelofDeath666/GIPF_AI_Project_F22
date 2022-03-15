@@ -15,4 +15,7 @@ public interface INode {
     boolean movePossible(Direction dir);
     boolean slidePiece(Piece piece, Direction dir, List<InnerNode> changedNodes);
     char getNodeChar();
+    List<Piece> getRow(Direction dir, List<Piece> row);
+    void setRow(Direction dir, List<Piece> row);
+    void clearRow(Direction dir);
 }

@@ -1,5 +1,6 @@
 package ai.gr64.Engine.DTOs.GameGraph;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ai.gr64.Data.Enums.Direction;
@@ -59,6 +60,28 @@ public class OuterNode implements INode{
     @Override
     public char getNodeChar() {
         return TextUI.outerSpaces;
+    }
+
+    @Override
+    public List<Piece> getRow(Direction dir, List<Piece> row) {
+        if (row != null)
+            return row;
+        row = new ArrayList<>();
+        return neighbor(dir).getRow(dir, row);
+    }
+
+    @Override
+    public void setRow(Direction dir, List<Piece> row) {
+        INode neighbor = neighbor(dir);
+        if (neighbor != null)
+            neighbor.setRow(dir, row);
+    }
+
+    @Override
+    public void clearRow(Direction dir) {
+        INode neighbor = neighbor(dir);
+        if (neighbor != null)
+            neighbor.clearRow(dir);
     }
 
 }
