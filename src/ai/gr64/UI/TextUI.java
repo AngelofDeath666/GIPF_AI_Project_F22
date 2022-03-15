@@ -18,6 +18,36 @@ public class TextUI implements IUI {
     private static final Scanner scan = new Scanner(System.in);
     public static String startPosition;
     public static String endPosition;
+
+    public static int[] LettersArray(int totalLayers) {
+        int letterLayers = totalLayers / 2 + 1;
+        int []letters = new int[letterLayers];
+        //the int for A
+        int number = 65;
+        
+        //takes the int values for the letters and add them to letters[]
+        for (int i = 0; i < letterLayers; i++) {
+            letters[i] = number;
+            number++;            
+        }
+
+        return letters;
+    }
+
+    private void PrintCoordinatesEnds(int currentLayer, int[] layerEnds, int[] letters) {
+        int nodeCount = currentLayer == 1 ? layerEnds[0]
+                : layerEnds[currentLayer / 2] - layerEnds[currentLayer / 2 - 1];
+
+        System.out.println(letters[currentLayer] + nodeCount);
+        
+        
+    }
+
+    private void PrintCoordinatesStart(int currentLayer, int[] letters) {
+        System.out.println(letters[currentLayer] + "1");
+        
+        
+    }
     
 
 
@@ -91,16 +121,17 @@ public class TextUI implements IUI {
         
     }
 
-    private Direction getValidDirection(int position) {
+    /* private Direction getValidDirection(int position) {
         //validate and return
 
         return Direction.
-    }
+    } */
 
     private int getValidNodePosition(GameState state) {
         String node = scan.nextLine();
         int position = -1;
         INode[] graph = state.getGraph();
+        boolean valid = false;
         
         //validate node
         if (!valid) {
@@ -119,14 +150,18 @@ public class TextUI implements IUI {
         int layers = (state.layers * 2 + 3) * 2 - 1;
         StringBuilder sb = new StringBuilder();
         int[] layerEnds = BoardUtils.LayerEnds(state.layers);
+        int[] letters = LettersArray(layers);
 
         for (int i = 0; i < layers; i++) {
+            PrintCoordinatesStart(i, letters);
             PrintWhiteSpaces(i, layers, sb);
             if (i % 2 == 0) {
                 PrintNodes(graph, layerEnds, i, sb);
             } else {
                 PrintConnections(i, layerEnds, layers, sb);
             }
+            PrintWhiteSpaces(i, layers, sb);
+            PrintCoordinatesEnds(i, layerEnds, letters);
             sb.append('\n');
         }
         
