@@ -13,6 +13,7 @@ public class Move implements IAction {
     private int placementNode;
     private Direction direction;
     private List<Piece> beforeRow, afterRow;
+    private List<ClearRow> availableActions;
 
     public Move(Piece piece, int placementNode, Direction direction) {
         this.piece = piece;
@@ -36,6 +37,10 @@ public class Move implements IAction {
         return direction;
     }
 
+    public List<ClearRow> getClearActions() {
+        return availableActions;
+    }
+
     @Override
     public void makeAction(GameState state) {
         if (afterRow != null) {
@@ -44,9 +49,12 @@ public class Move implements IAction {
         }
         if (beforeRow == null)
             beforeRow = state.getRow(placementNode, direction);
-        state.makeMove(this);
+        this.availableActions = state.makeMove(this);
         if (afterRow == null)
             afterRow = state.getRow(placementNode, direction);
+
+        if (availableActions.size() == 1)
+            state.makeAction(availableActions.get(0));
     }
 
     @Override

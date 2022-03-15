@@ -95,17 +95,17 @@ public class InnerNode implements INode{
 
     //Finds whether this row is completed in a specific direction
     private ClearRow directionalRow(Direction dir) {
-        int dir1 = 0, dir2 = 0;
+        int inARow = 1;
         if (neighbor(dir) instanceof InnerNode node)
-            dir1 = node.samePieceInARow(dir, this.piece);
+            inARow += node.samePieceInARow(dir, this.piece);
         if (neighbor(Direction.opposite(dir)) instanceof InnerNode node)
-            dir2 = node.samePieceInARow(Direction.opposite(dir), this.piece);
-        if (1 + dir1 + dir2 >= GameSettings.NumberInARowToClear) {
+            inARow += node.samePieceInARow(Direction.opposite(dir), this.piece);
+        if (inARow >= GameSettings.NumberInARowToClear) {
             INode sourceNode = neighbor(dir);
             while (sourceNode instanceof InnerNode) {
                 sourceNode = sourceNode.neighbor(dir);
             }
-            // return new ClearRow();
+            return new ClearRow(((OuterNode)sourceNode).getOuterIndex(), Direction.opposite(dir));
         }
         return null;
     }
