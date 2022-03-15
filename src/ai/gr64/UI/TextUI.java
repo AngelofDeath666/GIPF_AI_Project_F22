@@ -17,6 +17,7 @@ public class TextUI implements IUI {
     public static String startPosition;
     public static String endPosition;
 
+    //prints the coordinates in the start of a row
     private void PrintCoordinatesEnds(int currentLayer, int[] layerEnds, StringBuilder sb) {
         int nodeCount = currentLayer == 0 ? layerEnds[0]
                 : layerEnds[currentLayer / 2] - layerEnds[currentLayer / 2 - 1];
@@ -25,6 +26,7 @@ public class TextUI implements IUI {
 
     }
 
+    //Prints the coordinates in the end of a row
     private void PrintCoordinatesStart(int currentLayer, StringBuilder sb) {
         sb.append(((char) (97 + (currentLayer / 2))) + "1 ");
 
