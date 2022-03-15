@@ -8,7 +8,7 @@ import ai.gr64.Engine.DTOs.Actions.Move;
 public class GUI implements IUI {
 
     @Override
-    public Move GetPlayerInput() {
+    public Move GetPlayerInput(GameState state) {
         throw new UnsupportedOperationException("Not implemented.");
     }
 

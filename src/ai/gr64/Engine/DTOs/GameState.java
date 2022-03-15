@@ -11,6 +11,7 @@ import ai.gr64.Data.Interfaces.INode;
 import ai.gr64.Engine.DTOs.Actions.ClearRow;
 import ai.gr64.Engine.DTOs.Actions.Move;
 import ai.gr64.Engine.DTOs.GameGraph.InnerNode;
+import ai.gr64.Engine.DTOs.GameGraph.OuterNode;
 
 // The GameState, containing information about how the game is looking at this point in time
 // Has information about, the board, how many pieces each player has left, etc.
@@ -44,6 +45,7 @@ public class GameState {
                 nextNode = nextNode.neighbor(Direction.fromValue(i + 3));
                 nextNode = nextNode.neighbor(Direction.fromValue(i + 1));
                 outerNodes[workingIndex] = nextNode;
+                ((OuterNode)nextNode).setOuterIndex(workingIndex);
             }
         }
 

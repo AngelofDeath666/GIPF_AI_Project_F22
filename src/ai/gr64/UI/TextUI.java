@@ -1,31 +1,42 @@
 package ai.gr64.UI;
 
+import java.util.Scanner;
+
+import ai.gr64.Data.Enums.Direction;
+import ai.gr64.Data.Enums.Piece;
 import ai.gr64.Data.Interfaces.INode;
 import ai.gr64.Data.Interfaces.IUI;
+import ai.gr64.Data.Statics.TextStatics;
 import ai.gr64.Engine.DTOs.GameState;
 import ai.gr64.Engine.DTOs.Actions.Move;
 import ai.gr64.Utils.BoardUtils;
 
 public class TextUI implements IUI {
-    // These variables are the characters being used in the TextUI
-    public static final char whiteGIPF = 'W';
-    public static final char whitePieces = 'w';
-    public static final char blackGIPF = 'B';
-    public static final char blackPieces = 'b';
-    public static final char outerSpaces = 'o';
-    public static final char emptySpaces = 'x';
-    public static final char linearConnectors = '-';
-    public static final char leftDiagConnect = '\\';
-    public static final char rightDiagConnect = '/';
-    public static final char space = ' ';
+
+    private static final Scanner scan = new Scanner(System.in);
+    public static String startPosition;
+    public static String endPosition;
+
+    private void PrintCoordinatesEnds(int currentLayer, int[] layerEnds, StringBuilder sb) {
+        int nodeCount = currentLayer == 0 ? layerEnds[0]
+                : layerEnds[currentLayer / 2] - layerEnds[currentLayer / 2 - 1];
+
+        sb.append(" " + String.valueOf((char) (97 + (currentLayer / 2))) + nodeCount);
+
+    }
+
+    private void PrintCoordinatesStart(int currentLayer, StringBuilder sb) {
+        sb.append(((char) (97 + (currentLayer / 2))) + "1 ");
+
+    }
 
     // This method calculates the amount of white spaces needed and appends them to
     // the StringBuilder
     private void PrintWhiteSpaces(int currentLayer, int totalLayers, StringBuilder sb) {
         int middleLayer = totalLayers / 2 + 1;
         int whiteSpaces = Math.abs(middleLayer - (currentLayer + 1));
-        for (int i = 0; i < whiteSpaces; i++) {
-            sb.append(space);
+        for (int i = 0; i < whiteSpaces + (currentLayer % 2 == 0 ? 0 : 3); i++) {
+            sb.append(TextStatics.space);
         }
     }
 
@@ -40,14 +51,16 @@ public class TextUI implements IUI {
             if (i != layerEnds[currentLayer / 2] - nodeCount) {
 
                 if (currentLayer != 0 && currentLayer / 2 != layerEnds.length - 1) {
-                    sb.append(new char[] { linearConnectors, linearConnectors, linearConnectors });
+                    sb.append(new char[] { TextStatics.linearConnectors, TextStatics.linearConnectors,
+                            TextStatics.linearConnectors });
                 } else {
-                    sb.append(new char[] { space, space, space });
+                    sb.append(new char[] { TextStatics.space, TextStatics.space, TextStatics.space });
                 }
 
             }
 
             sb.append(graph[i].getNodeChar());
+
         }
 
     }
@@ -59,14 +72,14 @@ public class TextUI implements IUI {
                 : layerEnds[currentLayer / 2] - layerEnds[currentLayer / 2 - 1];
         if (currentLayer < middleLayer) {
             for (int i = 0; i < nodeCount; i++) {
-                sb.append(new char[] { i == 0 ? space : rightDiagConnect, space,
-                        i == nodeCount - 1 ? space : leftDiagConnect, space });
+                sb.append(new char[] { i == 0 ? TextStatics.space : TextStatics.rightDiagConnect, TextStatics.space,
+                        i == nodeCount - 1 ? TextStatics.space : TextStatics.leftDiagConnect, TextStatics.space });
 
             }
         } else {
             for (int i = 0; i < nodeCount - 1; i++) {
-                sb.append(new char[] { i == 0 ? space : leftDiagConnect, space,
-                        i == nodeCount - 2 ? space : rightDiagConnect, space });
+                sb.append(new char[] { i == 0 ? TextStatics.space : TextStatics.leftDiagConnect, TextStatics.space,
+                        i == nodeCount - 2 ? TextStatics.space : TextStatics.rightDiagConnect, TextStatics.space });
 
             }
 
@@ -75,9 +88,37 @@ public class TextUI implements IUI {
     }
 
     @Override
-    public Move GetPlayerInput() {
+    public Move GetPlayerInput(GameState state) {
 
-        throw new UnsupportedOperationException("Not implemented yet.");
+        int position = -1;
+        while (position == -1)
+            position = getValidNodePosition(state);
+
+        Direction dir = getValidDirection(position);
+
+        return new Move(Piece.NONE, position, dir);
+
+    }
+
+    private Direction getValidDirection(int position) {
+        // validate and return
+
+        return Direction.LEFT;
+    }
+
+    private int getValidNodePosition(GameState state) {
+        String node = scan.nextLine();
+        int position = -1;
+        INode[] graph = state.getGraph();
+        boolean valid = false;
+
+        // validate node
+        if (!valid) {
+            return -1;
+        }
+
+        return position;
+
     }
 
     // This method prints the board, starting with WhiteSpaces and then alternating
@@ -92,7 +133,9 @@ public class TextUI implements IUI {
         for (int i = 0; i < layers; i++) {
             PrintWhiteSpaces(i, layers, sb);
             if (i % 2 == 0) {
+                PrintCoordinatesStart(i, sb);
                 PrintNodes(graph, layerEnds, i, sb);
+                PrintCoordinatesEnds(i, layerEnds, sb);
             } else {
                 PrintConnections(i, layerEnds, layers, sb);
             }
@@ -100,6 +143,7 @@ public class TextUI implements IUI {
         }
 
         System.out.println(sb.toString());
+        System.out.println("\n\n\n" + TextStatics.messageP1 + TextStatics.messageOuterNode);
 
     }
 
