@@ -37,7 +37,8 @@ public class Move implements IAction {
         return direction;
     }
 
-    public List<ClearRow> getClearActions() {
+    @Override
+    public List<ClearRow> getAvailableActions() {
         return availableActions;
     }
 

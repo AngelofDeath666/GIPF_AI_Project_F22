@@ -136,4 +136,11 @@ public class InnerNode implements INode{
         this.piece = Piece.NONE;
         neighbor(dir).clearRow(dir);
     }
+
+    @Override
+    public boolean canClear(Direction dir) {
+        if (samePieceInARow(dir, this.piece) + 1 >= GameSettings.NumberInARowToClear)
+            return true;
+        return neighbor(dir).canClear(dir);
+    }
 }

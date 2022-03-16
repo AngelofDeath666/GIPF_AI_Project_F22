@@ -96,4 +96,10 @@ public class OuterNode implements INode{
             neighbor.clearRow(dir);
     }
 
+    @Override
+    public boolean canClear(Direction dir) {
+        if (!hasNeighbor(dir))
+            return false;
+        return neighbor(dir).canClear(dir);
+    }
 }

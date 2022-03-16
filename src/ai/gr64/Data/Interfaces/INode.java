@@ -18,4 +18,5 @@ public interface INode {
     List<Piece> getRow(Direction dir, List<Piece> row);
     void setRow(Direction dir, List<Piece> row);
     void clearRow(Direction dir);
+    boolean canClear(Direction dir);
 }

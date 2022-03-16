@@ -1,8 +1,9 @@
 package ai.gr64.Engine.DTOs;
 
 import java.util.ArrayList;
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Stack;
 
 import ai.gr64.Data.Enums.Direction;
 import ai.gr64.Data.Enums.Piece;
@@ -20,7 +21,7 @@ public class GameState {
     private INode[] graph, outerNodes;
     public final int layers;
     private List<InnerNode> changedNodes = new ArrayList<>();
-    private Stack<IAction> actionStack = new Stack<>();
+    private Deque<IAction> actionStack = new LinkedList<>();
 
     public GameState(int startingPieces, INode[] graph, int layers) {
         this.whitePiecesLeft = startingPieces;
@@ -48,8 +49,6 @@ public class GameState {
                 ((OuterNode)nextNode).setOuterIndex(workingIndex);
             }
         }
-
-
     }
 
     public INode[] getGraph() {
@@ -82,6 +81,10 @@ public class GameState {
         outerNodes[outerIndex].clearRow(dir);
     }
 
+    public boolean canClearRow(int outerIndex, Direction dir){
+        return outerNodes[outerIndex].canClear(dir);
+    }
+
     public void setRow(int outerIndex, Direction dir, List<Piece> pieces) {
         outerNodes[outerIndex].setRow(dir, pieces);
     }
@@ -97,5 +100,9 @@ public class GameState {
         }
         changedNodes.clear();
         return completedRows;
+    }
+
+    public List<ClearRow> getAvailableActions() {
+        return actionStack.peek().getAvailableActions();
     }
 }
