@@ -54,4 +54,8 @@ public class GameState {
     public boolean movePossible(Move move) {
         return outerNodes[move.getPlacementNode()].movePossible(move.getDirection());
     }
+
+    public INode[] getOuterNodes() {
+        return outerNodes;
+    }
 }

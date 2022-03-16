@@ -9,6 +9,8 @@ import ai.gr64.Data.Interfaces.IUI;
 import ai.gr64.Data.Statics.TextStatics;
 import ai.gr64.Engine.DTOs.GameState;
 import ai.gr64.Engine.DTOs.Move;
+import ai.gr64.Engine.DTOs.GameGraph.InnerNode;
+import ai.gr64.Engine.DTOs.GameGraph.OuterNode;
 import ai.gr64.Utils.BoardUtils;
 
 public class TextUI implements IUI {
@@ -17,7 +19,45 @@ public class TextUI implements IUI {
     public static String startPosition;
     public static String endPosition;
 
-    //prints the coordinates in the start of a row
+    // This method prints the board, starting with WhiteSpaces and then alternating
+    // between Nodes and Diagonal Connections
+    @Override
+    public void UpdateUi(GameState state) {
+        INode[] graph = state.getGraph();
+        int layers = (state.layers * 2 + 3) * 2 - 1;
+        StringBuilder sb = new StringBuilder();
+        int[] layerEnds = BoardUtils.LayerEnds(state.layers);
+
+        for (int i = 0; i < layers; i++) {
+            PrintWhiteSpaces(i, layers, sb);
+            if (i % 2 == 0) {
+                PrintCoordinatesStart(i, sb);
+                PrintNodes(graph, layerEnds, i, sb);
+                PrintCoordinatesEnds(i, layerEnds, sb);
+            } else {
+                PrintConnections(i, layerEnds, layers, sb);
+            }
+            sb.append('\n');
+        }
+
+        System.out.println(sb.toString());
+        System.out.println("\n\n\n" + TextStatics.messageP1 + TextStatics.messageOuterNode);
+
+    }
+
+    @Override
+    public Move GetPlayerInput(GameState state) {
+        int position = -1;
+        while (position == -1)
+            position = getValidNodePosition(state);
+
+        Direction dir = getValidDirection(position, state);
+
+        return new Move(Piece.WHITE, position, dir);
+
+    }
+
+    // prints the coordinates in the start of a row
     private void PrintCoordinatesEnds(int currentLayer, int[] layerEnds, StringBuilder sb) {
         int nodeCount = currentLayer == 0 ? layerEnds[0]
                 : layerEnds[currentLayer / 2] - layerEnds[currentLayer / 2 - 1];
@@ -26,7 +66,7 @@ public class TextUI implements IUI {
 
     }
 
-    //Prints the coordinates in the end of a row
+    // Prints the coordinates in the end of a row
     private void PrintCoordinatesStart(int currentLayer, StringBuilder sb) {
         sb.append(((char) (97 + (currentLayer / 2))) + "1 ");
 
@@ -89,63 +129,60 @@ public class TextUI implements IUI {
 
     }
 
-    @Override
-    public Move GetPlayerInput(GameState state) {
+    private Direction getValidDirection(int position, GameState state) {
+        // validate direction and return
+        Direction moveDirection;
+        boolean validNeighbor;
+        int direction;
 
-        int position = -1;
-        while (position == -1)
-            position = getValidNodePosition(state);
+        do {
+            direction = scan.nextInt();
+            moveDirection = Direction.fromValue(direction);
+            validNeighbor = state.getOuterNodes()[position].hasNeighbor(moveDirection);
+        } while (!validNeighbor);
 
-        Direction dir = getValidDirection(position);
-
-        return new Move(Piece.NONE, position, dir);
-
-    }
-
-    private Direction getValidDirection(int position) {
-        // validate and return
-
-        return Direction.LEFT;
+        return moveDirection;
     }
 
     private int getValidNodePosition(GameState state) {
-        String node = scan.nextLine();
         int position = -1;
         INode[] graph = state.getGraph();
         boolean valid = false;
-
-        // validate node
-        if (!valid) {
-            return -1;
-        }
-
-        return position;
-
-    }
-
-    // This method prints the board, starting with WhiteSpaces and then alternating
-    // between Nodes and Diagonal Connections
-    @Override
-    public void UpdateUi(GameState state) {
-        INode[] graph = state.getGraph();
-        int layers = (state.layers * 2 + 3) * 2 - 1;
-        StringBuilder sb = new StringBuilder();
+        int nodeNum = -1;
+        char rowChar;
+        int currentLayer = -1;
         int[] layerEnds = BoardUtils.LayerEnds(state.layers);
 
-        for (int i = 0; i < layers; i++) {
-            PrintWhiteSpaces(i, layers, sb);
-            if (i % 2 == 0) {
-                PrintCoordinatesStart(i, sb);
-                PrintNodes(graph, layerEnds, i, sb);
-                PrintCoordinatesEnds(i, layerEnds, sb);
-            } else {
-                PrintConnections(i, layerEnds, layers, sb);
-            }
-            sb.append('\n');
-        }
+        // validate node :)
+        do {
 
-        System.out.println(sb.toString());
-        System.out.println("\n\n\n" + TextStatics.messageP1 + TextStatics.messageOuterNode);
+            do {
+                String node = scan.nextLine();
+                rowChar = node.charAt(0);
+                try {
+                    nodeNum = Integer.parseInt(node.substring(1));
+                } catch (Exception e) {
+                    continue;
+                }
+
+                if (!(rowChar >= 'a' && rowChar <= 'a' + layerEnds.length - 1))
+                    continue;
+
+                currentLayer = ((int) (rowChar - 'a'));
+                int nodeCount = currentLayer == 0 ? layerEnds[0]
+                        : layerEnds[currentLayer] - layerEnds[currentLayer - 1];
+
+                if (!(nodeNum >= 1 && nodeNum <= nodeCount))
+                    continue;
+
+                // This line will be skipped if the input is invalid
+                valid = true;
+
+            } while (!valid);
+            position = layerEnds[currentLayer - 1] + nodeNum;
+        } while (graph[position] instanceof InnerNode);
+
+        return ((OuterNode) graph[position]).getOuterIndex();
 
     }
 
