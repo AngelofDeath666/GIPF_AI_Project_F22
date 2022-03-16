@@ -25,5 +25,7 @@ public class TextStatics {
     public static final String warningFilledRow = "You made an illegal move, you can't move a piece into a full row. Please try again.";
     public static final String warningCoordinates = "You did not enter a valid coordinate. Please try again.";
     public static final String warningLetter = "Please enter a letter between a and i.";
-    public static final String warningNumber = "Please enter a number corresponding to the row.";
+    public static final String warningNumberRow = "Please enter a number corresponding to the row.";
+    public static final String warningNumberDirection = "Not a number.";
+    public static final String warningNoNeighbor = "There is no neighbor in that direction.";
 }

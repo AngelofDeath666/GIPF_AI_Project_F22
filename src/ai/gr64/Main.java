@@ -15,9 +15,11 @@ public class Main {
         GameState state = StateFactory.create(3, StartingPieces.NORMAL,15);
         var UI = new TextUI();
 
+        
+        var movegens = UI.startGame();
         //The move-gens choose how to play the game, whether it is a player, some random AI, og a smart AI of some kind
-        var moveGen1 = new RandomAI();
-        var moveGen2 = new PlayerMoveGen(UI);
+        var moveGen1 = movegens.getKey();
+        var moveGen2 = movegens.getValue();
 
         //Pass them to the game
         var game = new Engine(moveGen1, moveGen2,UI, state);

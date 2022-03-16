@@ -2,8 +2,11 @@ package ai.gr64.UI;
 
 import java.util.Scanner;
 
+import ai.gr64.AI.PlayerMoveGen;
+import ai.gr64.AI.RandomAI;
 import ai.gr64.Data.Enums.Direction;
 import ai.gr64.Data.Enums.Piece;
+import ai.gr64.Data.Interfaces.IMoveGen;
 import ai.gr64.Data.Interfaces.INode;
 import ai.gr64.Data.Interfaces.IUI;
 import ai.gr64.Data.Statics.TextStatics;
@@ -12,6 +15,7 @@ import ai.gr64.Engine.DTOs.Move;
 import ai.gr64.Engine.DTOs.GameGraph.InnerNode;
 import ai.gr64.Engine.DTOs.GameGraph.OuterNode;
 import ai.gr64.Utils.BoardUtils;
+import javafx.util.Pair;
 
 public class TextUI implements IUI {
 
@@ -28,7 +32,7 @@ public class TextUI implements IUI {
         StringBuilder sb = new StringBuilder();
         int[] layerEnds = BoardUtils.LayerEnds(state.layers);
 
-        System.out.println(TextStatics.explainDirection);
+        
 
         for (int i = 0; i < layers; i++) {
             PrintWhiteSpaces(i, layers, sb);
@@ -131,6 +135,7 @@ public class TextUI implements IUI {
 
     }
 
+
     private Direction getValidDirection(int position, GameState state) {
         // validate direction and return
         Direction moveDirection = Direction.DOWN_LEFT;
@@ -141,13 +146,13 @@ public class TextUI implements IUI {
             try {
                 direction = Integer.parseInt(scan.nextLine());
             } catch (Exception e) {
-                System.out.println("It was not a given number");
+                System.out.println(TextStatics.warningNumberDirection);
                 continue;
             }
             moveDirection = Direction.fromValue(direction);
             validNeighbor = state.getOuterNodes()[position].hasNeighbor(moveDirection);
             if (!validNeighbor)
-                System.out.println("There is no neighbor in that direction");
+                System.out.println(TextStatics.warningNoNeighbor);
         } while (!validNeighbor);
 
         return moveDirection;
@@ -165,7 +170,7 @@ public class TextUI implements IUI {
         // validate node :)
         do {
             if (valid)
-                System.out.println("Invalid node");
+                System.out.println(TextStatics.warningInner);
             valid = false;
             do {
                 String node = scan.nextLine();
@@ -187,7 +192,7 @@ public class TextUI implements IUI {
                         : layerEnds[currentLayer] - layerEnds[currentLayer - 1];
 
                 if (!(nodeNum >= 1 && nodeNum <= nodeCount)) {
-                    System.out.println(TextStatics.warningNumber);
+                    System.out.println(TextStatics.warningNumberRow);
                     continue;
                 }
 
@@ -200,6 +205,11 @@ public class TextUI implements IUI {
 
         return ((OuterNode) graph[position]).getOuterIndex();
 
+    }
+    // Prints start explanation and chooses player type
+    public Pair<IMoveGen,IMoveGen> startGame() {
+        System.out.println(TextStatics.explainDirection);
+        return new Pair<IMoveGen,IMoveGen>(new PlayerMoveGen(this), new RandomAI());
     }
 
 }
