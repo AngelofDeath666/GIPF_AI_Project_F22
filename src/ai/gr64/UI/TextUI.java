@@ -131,12 +131,16 @@ public class TextUI implements IUI {
 
     private Direction getValidDirection(int position, GameState state) {
         // validate direction and return
-        Direction moveDirection;
-        boolean validNeighbor;
+        Direction moveDirection = Direction.DOWN_LEFT;
+        boolean validNeighbor = false;
         int direction;
 
         do {
-            direction = scan.nextInt();
+            try {
+                direction = Integer.parseInt(scan.nextLine());
+            } catch (Exception e) {
+                continue;
+            }
             moveDirection = Direction.fromValue(direction);
             validNeighbor = state.getOuterNodes()[position].hasNeighbor(moveDirection);
         } while (!validNeighbor);
@@ -155,7 +159,7 @@ public class TextUI implements IUI {
 
         // validate node :)
         do {
-
+            valid = false;
             do {
                 String node = scan.nextLine();
                 rowChar = node.charAt(0);
@@ -179,7 +183,7 @@ public class TextUI implements IUI {
                 valid = true;
 
             } while (!valid);
-            position = layerEnds[currentLayer - 1] + nodeNum;
+            position = layerEnds[currentLayer - 1] + nodeNum - 1;
         } while (graph[position] instanceof InnerNode);
 
         return ((OuterNode) graph[position]).getOuterIndex();
