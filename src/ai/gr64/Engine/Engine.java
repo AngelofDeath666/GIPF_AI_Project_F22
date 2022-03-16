@@ -1,5 +1,6 @@
 package ai.gr64.Engine;
 
+import ai.gr64.Data.Enums.Piece;
 import ai.gr64.Data.Interfaces.IMoveGen;
 import ai.gr64.Data.Interfaces.IUI;
 import ai.gr64.Engine.DTOs.GameState;
@@ -24,6 +25,7 @@ public class Engine {
         while (turn < 10000) {
            // Run Game 
            Move move = turn % 2 == 0 ? MoveGen1.NextMove(state) : MoveGen2.NextMove(state);
+           move.setPiece(turn % 2 == 0 ? Piece.WHITE : Piece.BLACK);
            state.makeMove(move);
            UI.UpdateUi(state);
            turn++;

@@ -12,7 +12,6 @@ import ai.gr64.Engine.DTOs.Move;
 import ai.gr64.Engine.DTOs.GameGraph.InnerNode;
 import ai.gr64.Engine.DTOs.GameGraph.OuterNode;
 import ai.gr64.Utils.BoardUtils;
-import javafx.scene.text.Text;
 
 public class TextUI implements IUI {
 
@@ -142,11 +141,13 @@ public class TextUI implements IUI {
             try {
                 direction = Integer.parseInt(scan.nextLine());
             } catch (Exception e) {
-                System.out.println("direction prob");
+                System.out.println("It was not a given number");
                 continue;
             }
             moveDirection = Direction.fromValue(direction);
             validNeighbor = state.getOuterNodes()[position].hasNeighbor(moveDirection);
+            if (!validNeighbor)
+                System.out.println("There is no neighbor in that direction");
         } while (!validNeighbor);
 
         return moveDirection;
@@ -163,6 +164,8 @@ public class TextUI implements IUI {
 
         // validate node :)
         do {
+            if (valid)
+                System.out.println("Invalid node");
             valid = false;
             do {
                 String node = scan.nextLine();
@@ -192,7 +195,7 @@ public class TextUI implements IUI {
                 valid = true;
 
             } while (!valid);
-            position = layerEnds[currentLayer - 1] + nodeNum - 1;
+            position = currentLayer == 0 ? nodeNum - 1 : layerEnds[currentLayer - 1] + nodeNum - 1;
         } while (graph[position] instanceof InnerNode);
 
         return ((OuterNode) graph[position]).getOuterIndex();
