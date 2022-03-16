@@ -12,6 +12,7 @@ import ai.gr64.Engine.DTOs.Move;
 import ai.gr64.Engine.DTOs.GameGraph.InnerNode;
 import ai.gr64.Engine.DTOs.GameGraph.OuterNode;
 import ai.gr64.Utils.BoardUtils;
+import javafx.scene.text.Text;
 
 public class TextUI implements IUI {
 
@@ -27,6 +28,8 @@ public class TextUI implements IUI {
         int layers = (state.layers * 2 + 3) * 2 - 1;
         StringBuilder sb = new StringBuilder();
         int[] layerEnds = BoardUtils.LayerEnds(state.layers);
+
+        System.out.println(TextStatics.explainDirection);
 
         for (int i = 0; i < layers; i++) {
             PrintWhiteSpaces(i, layers, sb);
@@ -139,6 +142,7 @@ public class TextUI implements IUI {
             try {
                 direction = Integer.parseInt(scan.nextLine());
             } catch (Exception e) {
+                System.out.println("direction prob");
                 continue;
             }
             moveDirection = Direction.fromValue(direction);
@@ -166,18 +170,23 @@ public class TextUI implements IUI {
                 try {
                     nodeNum = Integer.parseInt(node.substring(1));
                 } catch (Exception e) {
+                    System.out.println(TextStatics.warningCoordinates);
                     continue;
                 }
 
-                if (!(rowChar >= 'a' && rowChar <= 'a' + layerEnds.length - 1))
+                if (!(rowChar >= 'a' && rowChar <= 'a' + layerEnds.length - 1)) {
+                    System.out.println(TextStatics.warningLetter);
                     continue;
+                }
 
                 currentLayer = ((int) (rowChar - 'a'));
                 int nodeCount = currentLayer == 0 ? layerEnds[0]
                         : layerEnds[currentLayer] - layerEnds[currentLayer - 1];
 
-                if (!(nodeNum >= 1 && nodeNum <= nodeCount))
+                if (!(nodeNum >= 1 && nodeNum <= nodeCount)) {
+                    System.out.println(TextStatics.warningNumber);
                     continue;
+                }
 
                 // This line will be skipped if the input is invalid
                 valid = true;
