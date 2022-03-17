@@ -83,10 +83,10 @@ public class InnerNode implements INode{
     }
 
     //Find all the completed rows this node is a part of
-    public Collection<ClearRow> rowsCompleted() {
+    public Collection<ClearRow> rowsCompleted(Piece sourcePiece) {
         List<ClearRow> rows = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
-            ClearRow row = directionalRow(Direction.fromValue(i));
+            ClearRow row = directionalRow(Direction.fromValue(i), sourcePiece);
             if (row != null)
                 rows.add(row);
         }
@@ -94,7 +94,7 @@ public class InnerNode implements INode{
     }
 
     //Finds whether this row is completed in a specific direction
-    private ClearRow directionalRow(Direction dir) {
+    private ClearRow directionalRow(Direction dir, Piece sourPiece) {
         int inARow = 1;
         if (neighbor(dir) instanceof InnerNode node)
             inARow += node.samePieceInARow(dir, this.piece);
@@ -105,7 +105,7 @@ public class InnerNode implements INode{
             while (sourceNode instanceof InnerNode) {
                 sourceNode = sourceNode.neighbor(dir);
             }
-            return new ClearRow(((OuterNode)sourceNode).getOuterIndex(), Direction.opposite(dir));
+            return new ClearRow(((OuterNode)sourceNode).getOuterIndex(), Direction.opposite(dir), sourPiece);
         }
         return null;
     }

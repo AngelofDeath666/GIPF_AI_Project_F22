@@ -24,8 +24,8 @@ public class GameState {
     private Deque<IAction> actionStack = new LinkedList<>();
 
     public GameState(int startingPieces, INode[] graph, int layers) {
-        this.whitePiecesLeft = startingPieces;
-        this.blackPiecesLeft = startingPieces;
+        this.setWhitePiecesLeft(startingPieces);
+        this.setBlackPiecesLeft(startingPieces);
         this.graph = graph;
         this.layers = layers;
 
@@ -51,6 +51,22 @@ public class GameState {
         }
     }
 
+    public int getBlackPiecesLeft() {
+        return blackPiecesLeft;
+    }
+
+    public void setBlackPiecesLeft(int blackPiecesLeft) {
+        this.blackPiecesLeft = blackPiecesLeft;
+    }
+
+    public int getWhitePiecesLeft() {
+        return whitePiecesLeft;
+    }
+
+    public void setWhitePiecesLeft(int whitePiecesLeft) {
+        this.whitePiecesLeft = whitePiecesLeft;
+    }
+
     public INode[] getGraph() {
         return graph;
     }
@@ -66,11 +82,15 @@ public class GameState {
 
     // The method called when making a move on the board
     public List<ClearRow> makeMove(Move move) {
+        if (move.getPiece() == Piece.WHITE)
+            setWhitePiecesLeft(getWhitePiecesLeft() - 1);
+        else
+            setBlackPiecesLeft(getBlackPiecesLeft() - 1);
         if (move.getPlacementNode() >= outerNodes.length)
             throw new IndexOutOfBoundsException(
                     "The placement-node of move must be non-negative and lower then the number of outer nodes on the board");
         outerNodes[move.getPlacementNode()].slidePiece(move.getPiece(), move.getDirection(), changedNodes);
-        return rowsCompleted();
+        return rowsCompleted(move.getPiece());
     }
 
     public List<Piece> getRow(int outerIndex, Direction dir) {
@@ -93,16 +113,18 @@ public class GameState {
         return outerNodes[move.getPlacementNode()].movePossible(move.getDirection());
     }
 
-    private List<ClearRow> rowsCompleted() {
+    private List<ClearRow> rowsCompleted(Piece sourcePiece) {
         List<ClearRow> completedRows = new ArrayList<>();
         for (InnerNode innerNode : changedNodes) {
-            completedRows.addAll(innerNode.rowsCompleted());
+            completedRows.addAll(innerNode.rowsCompleted(sourcePiece));
         }
         changedNodes.clear();
         return completedRows;
     }
 
     public List<ClearRow> getAvailableActions() {
+        if (actionStack.isEmpty())
+            return new ArrayList<>(0);
         return actionStack.peek().getAvailableActions();
     }
 
