@@ -2,6 +2,8 @@ package ai.gr64.UI;
 
 import java.util.Scanner;
 
+import org.w3c.dom.Text;
+
 import ai.gr64.AI.PlayerMoveGen;
 import ai.gr64.AI.RandomAI;
 import ai.gr64.Data.Enums.Direction;
@@ -57,6 +59,7 @@ public class TextUI implements IUI {
         while (position == -1)
             position = getValidNodePosition(state);
 
+        System.out.println(TextStatics.messageDirection);
         Direction dir = getValidDirection(position, state);
 
         return new Move(Piece.WHITE, position, dir);
@@ -206,10 +209,53 @@ public class TextUI implements IUI {
         return ((OuterNode) graph[position]).getOuterIndex();
 
     }
+
     // Prints start explanation and chooses player type
     public Pair<IMoveGen,IMoveGen> startGame() {
+        int playerType;
+        IMoveGen player1 = new RandomAI();
+        IMoveGen player2 = new RandomAI();
+        boolean valid = false;
+        System.out.println(TextStatics.messagePlayersP1);
+        System.out.println(TextStatics.messagePlayersP2);
+        do {
+            try {
+                playerType = Integer.parseInt(scan.nextLine());
+            } catch (Exception e) {
+                System.out.println(TextStatics.warningNumberPlayer);
+                continue;
+            }
+            if (playerType > 1 || playerType < 0) {
+                System.out.println(TextStatics.warningNumberPlayer);
+                continue;
+            }
+            if (playerType == 0) {
+                player1 = new PlayerMoveGen(this);
+            }
+            valid = true;
+        } while (!valid);
+
+        valid = false;
+        System.out.println(TextStatics.messagePlayersP3);
+        do {
+            try {
+                playerType = Integer.parseInt(scan.nextLine());
+            } catch (Exception e) {
+                System.out.println(TextStatics.warningNumberPlayer);
+                continue;
+            }
+            if (playerType > 1 || playerType < 0) {
+                System.out.println(TextStatics.warningNumberPlayer);
+                continue;
+            }
+            if (playerType == 0) {
+                player2 = new PlayerMoveGen(this);
+            }
+            valid = true;
+        } while (!valid);
+
         System.out.println(TextStatics.explainDirection);
-        return new Pair<IMoveGen,IMoveGen>(new PlayerMoveGen(this), new RandomAI());
+        return new Pair<IMoveGen,IMoveGen>(player1, player2);
     }
 
 }
