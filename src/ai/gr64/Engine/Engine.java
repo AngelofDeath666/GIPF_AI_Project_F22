@@ -1,7 +1,5 @@
 package ai.gr64.Engine;
 
-import java.io.Console;
-
 import ai.gr64.Data.Enums.Piece;
 import ai.gr64.Data.Interfaces.IAction;
 import ai.gr64.Data.Interfaces.IMoveGen;
