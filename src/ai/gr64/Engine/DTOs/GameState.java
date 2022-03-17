@@ -105,4 +105,8 @@ public class GameState {
     public List<ClearRow> getAvailableActions() {
         return actionStack.peek().getAvailableActions();
     }
+
+    public INode[] getOuterNodes() {
+        return outerNodes;
+    }
 }
