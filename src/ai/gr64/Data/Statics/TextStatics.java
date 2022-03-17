@@ -7,7 +7,7 @@ public class TextStatics {
     public static final char blackGIPF = 'B';
     public static final char blackPieces = 'b';
     public static final char outerSpaces = 'o';
-    public static final char emptySpaces = 'X';
+    public static final char emptySpaces = ' ';
     public static final char linearConnectors = '-';
     public static final char leftDiagConnect = '\\';
     public static final char rightDiagConnect = '/';

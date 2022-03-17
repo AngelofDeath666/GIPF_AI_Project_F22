@@ -1,6 +1,7 @@
 package ai.gr64.Engine;
 
 import ai.gr64.Data.Enums.Piece;
+import ai.gr64.Data.Interfaces.IAction;
 import ai.gr64.Data.Interfaces.IMoveGen;
 import ai.gr64.Data.Interfaces.IUI;
 import ai.gr64.Engine.DTOs.GameState;
@@ -18,18 +19,29 @@ public class Engine {
         UI = ui;
         this.state = state;
     }
-    
-    // The main loop of the game, gets the next move from the correct moveGen and uses it on the game board, should also handle checking whether the game is over, and who won.
+
+    // The main loop of the game, gets the next move from the correct moveGen and
+    // uses it on the game board, should also handle checking whether the game is
+    // over, and who won.
     public void Run() {
         int turn = 0;
+        boolean gameRunning = true;
         UI.UpdateUi(state);
-        while (turn < 10000) {
-           // Run Game 
-           Move move = turn % 2 == 0 ? MoveGen1.NextMove(state) : MoveGen2.NextMove(state);
-           move.setPiece(turn % 2 == 0 ? Piece.WHITE : Piece.BLACK);
-           state.makeAction(move);
-           UI.UpdateUi(state);
-           turn++;
+        while (gameRunning) {
+            // Run Game
+            IAction move = turn % 2 == 0 ? MoveGen1.NextMove(state) : MoveGen2.NextMove(state);
+            if (move instanceof Move)
+                ((Move) move).setPiece(turn % 2 == 0 ? Piece.WHITE : Piece.BLACK);
+            state.makeAction(move);
+            UI.UpdateUi(state);
+            turn++;
+            if (turn % 2 == 0 ? (state.getWhitePiecesLeft() == 0) : (state.getBlackPiecesLeft() == 0))
+                gameRunning = false;
         }
+        System.out.println("Game over");
+        if (state.getWhitePiecesLeft() == 0)
+            System.out.println("Black player won");
+        else
+            System.out.println("White player won");
     }
 }

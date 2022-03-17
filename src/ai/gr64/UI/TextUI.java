@@ -209,7 +209,7 @@ public class TextUI implements IUI {
     // Prints start explanation and chooses player type
     public Pair<IMoveGen,IMoveGen> startGame() {
         System.out.println(TextStatics.explainDirection);
-        return new Pair<IMoveGen,IMoveGen>(new PlayerMoveGen(this), new RandomAI());
+        return new Pair<IMoveGen,IMoveGen>(new RandomAI(), new RandomAI());
     }
 
 }

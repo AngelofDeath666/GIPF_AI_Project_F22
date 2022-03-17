@@ -33,7 +33,11 @@ public class BoardUtils {
     }
 
     public static List<IAction> getAllActions(GameState state) {
-        List<IAction> actions = Arrays.asList(GetAllMoves(state));
+        IAction[] moves = GetAllMoves(state);
+        List<IAction> actions = new ArrayList<>();
+        for (IAction moveAction : moves) {
+            actions.add(moveAction);
+        }
         actions.addAll(state.getAvailableActions());
         return actions;
     }
