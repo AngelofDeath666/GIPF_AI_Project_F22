@@ -53,9 +53,6 @@ public class Move implements IAction {
         this.availableActions = state.makeMove(this);
         if (afterRow == null)
             afterRow = state.getRow(placementNode, direction);
-
-        if (availableActions.size() == 1)
-            state.makeAction(availableActions.get(0));
     }
 
     @Override
