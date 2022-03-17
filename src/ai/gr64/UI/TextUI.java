@@ -11,7 +11,7 @@ import ai.gr64.Data.Interfaces.INode;
 import ai.gr64.Data.Interfaces.IUI;
 import ai.gr64.Data.Statics.TextStatics;
 import ai.gr64.Engine.DTOs.GameState;
-import ai.gr64.Engine.DTOs.Move;
+import ai.gr64.Engine.DTOs.Actions.Move;
 import ai.gr64.Engine.DTOs.GameGraph.InnerNode;
 import ai.gr64.Engine.DTOs.GameGraph.OuterNode;
 import ai.gr64.Utils.BoardUtils;

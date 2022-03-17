@@ -1,8 +1,14 @@
 package ai.gr64.Engine.DTOs.GameGraph;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import ai.gr64.Data.Enums.Direction;
 import ai.gr64.Data.Enums.Piece;
 import ai.gr64.Data.Interfaces.INode;
+import ai.gr64.Data.Statics.GameSettings;
+import ai.gr64.Engine.DTOs.Actions.ClearRow;
 
 // Class representing an OuterNode
 // An inner node is one of the spaces on the board which is not on the edge, and where pieces stay between turns. A counterpart to the outer-nodes
@@ -40,12 +46,16 @@ public class InnerNode implements INode{
     // Sets this pice to the given pice, and slides the current piece on the next node, if there was a current piece
     // Checks that the piece can actually be slid on before updating, returns false if it would end up being an illegal move 
     @Override
-    public boolean slidePiece(Piece piece, Direction dir) {
+    public boolean slidePiece(Piece piece, Direction dir, List<InnerNode> changedNodes) {
         if (this.piece == Piece.NONE) {
             this.piece = piece;
+            changedNodes.add(this);
             return true;
         }
-        if (neighbor(dir).slidePiece(this.piece, dir)) {
+        if (neighbor(dir).slidePiece(this.piece, dir, changedNodes)) {
+            if (this.piece != piece) {
+                changedNodes.add(this);
+            }
             this.piece = piece;
             return true;
         }
@@ -71,7 +81,66 @@ public class InnerNode implements INode{
     public char getNodeChar() {
         return Piece.getPieceChar(piece);
     }
+
+    //Find all the completed rows this node is a part of
+    public Collection<ClearRow> rowsCompleted() {
+        List<ClearRow> rows = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            ClearRow row = directionalRow(Direction.fromValue(i));
+            if (row != null)
+                rows.add(row);
+        }
+        return rows;
+    }
+
+    //Finds whether this row is completed in a specific direction
+    private ClearRow directionalRow(Direction dir) {
+        int inARow = 1;
+        if (neighbor(dir) instanceof InnerNode node)
+            inARow += node.samePieceInARow(dir, this.piece);
+        if (neighbor(Direction.opposite(dir)) instanceof InnerNode node)
+            inARow += node.samePieceInARow(Direction.opposite(dir), this.piece);
+        if (inARow >= GameSettings.NumberInARowToClear) {
+            INode sourceNode = neighbor(dir);
+            while (sourceNode instanceof InnerNode) {
+                sourceNode = sourceNode.neighbor(dir);
+            }
+            return new ClearRow(((OuterNode)sourceNode).getOuterIndex(), Direction.opposite(dir));
+        }
+        return null;
+    }
+
+    // Finds how many of the same piece there is in a row in the given direction
+    public int samePieceInARow(Direction dir, Piece piece) {
+        if (this.piece != piece)
+            return 0;
+        if (neighbor(dir) instanceof InnerNode innerNode)
+            return 1 + innerNode.samePieceInARow(dir, piece);
+        return 1;
+    }
+
+    @Override
+    public List<Piece> getRow(Direction dir, List<Piece> row) {
+        row.add(this.piece);
+        return neighbor(dir).getRow(dir, row);
+    }
+
+    @Override
+    public void setRow(Direction dir, List<Piece> row) {
+        this.piece = row.remove(0);
+        neighbor(dir).setRow(dir, row);
+    }
+
+    @Override
+    public void clearRow(Direction dir) {
+        this.piece = Piece.NONE;
+        neighbor(dir).clearRow(dir);
+    }
+
+    @Override
+    public boolean canClear(Direction dir) {
+        if (samePieceInARow(dir, this.piece) + 1 >= GameSettings.NumberInARowToClear)
+            return true;
+        return neighbor(dir).canClear(dir);
+    }
 }
-
-
-

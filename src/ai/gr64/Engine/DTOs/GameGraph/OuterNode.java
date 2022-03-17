@@ -1,5 +1,8 @@
 package ai.gr64.Engine.DTOs.GameGraph;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ai.gr64.Data.Enums.Direction;
 import ai.gr64.Data.Enums.Piece;
 import ai.gr64.Data.Interfaces.INode;
@@ -37,10 +40,10 @@ public class OuterNode implements INode{
 
     // The method called when a player is making a move
     @Override
-    public boolean slidePiece(Piece piece, Direction dir) {
+    public boolean slidePiece(Piece piece, Direction dir, List<InnerNode> changedNodes) {
         if (! hasNeighbor(dir)) 
             return false;
-        return neighbor(dir).slidePiece(piece, dir);
+        return neighbor(dir).slidePiece(piece, dir, changedNodes);
     }
 
     // Returns whether sliding a piece in the direction dir is possible
@@ -71,4 +74,32 @@ public class OuterNode implements INode{
         this.outerIndex = outerIndex;
     }
 
+    @Override
+    public List<Piece> getRow(Direction dir, List<Piece> row) {
+        if (row != null)
+            return row;
+        row = new ArrayList<>();
+        return neighbor(dir).getRow(dir, row);
+    }
+
+    @Override
+    public void setRow(Direction dir, List<Piece> row) {
+        INode neighbor = neighbor(dir);
+        if (neighbor != null)
+            neighbor.setRow(dir, row);
+    }
+
+    @Override
+    public void clearRow(Direction dir) {
+        INode neighbor = neighbor(dir);
+        if (neighbor != null)
+            neighbor.clearRow(dir);
+    }
+
+    @Override
+    public boolean canClear(Direction dir) {
+        if (!hasNeighbor(dir))
+            return false;
+        return neighbor(dir).canClear(dir);
+    }
 }

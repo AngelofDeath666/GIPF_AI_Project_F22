@@ -1,7 +1,17 @@
 package ai.gr64.Engine.DTOs;
 
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.List;
+
 import ai.gr64.Data.Enums.Direction;
+import ai.gr64.Data.Enums.Piece;
+import ai.gr64.Data.Interfaces.IAction;
 import ai.gr64.Data.Interfaces.INode;
+import ai.gr64.Engine.DTOs.Actions.ClearRow;
+import ai.gr64.Engine.DTOs.Actions.Move;
+import ai.gr64.Engine.DTOs.GameGraph.InnerNode;
 import ai.gr64.Engine.DTOs.GameGraph.OuterNode;
 
 // The GameState, containing information about how the game is looking at this point in time
@@ -10,6 +20,8 @@ public class GameState {
     private int whitePiecesLeft, blackPiecesLeft;
     private INode[] graph, outerNodes;
     public final int layers;
+    private List<InnerNode> changedNodes = new ArrayList<>();
+    private Deque<IAction> actionStack = new LinkedList<>();
 
     public GameState(int startingPieces, INode[] graph, int layers) {
         this.whitePiecesLeft = startingPieces;
@@ -43,16 +55,55 @@ public class GameState {
         return graph;
     }
 
+    public void makeAction(IAction action) {
+        actionStack.push(action);
+        action.makeAction(this);
+    }
+
+    public void unmakeAction() {
+        actionStack.pop().unmakeAction(this);
+    }
+
     // The method called when making a move on the board
-    public boolean makeMove(Move move) {
+    public List<ClearRow> makeMove(Move move) {
         if (move.getPlacementNode() >= outerNodes.length)
             throw new IndexOutOfBoundsException(
                     "The placement-node of move must be non-negative and lower then the number of outer nodes on the board");
-        return outerNodes[move.getPlacementNode()].slidePiece(move.getPiece(), move.getDirection());
+        outerNodes[move.getPlacementNode()].slidePiece(move.getPiece(), move.getDirection(), changedNodes);
+        return rowsCompleted();
+    }
+
+    public List<Piece> getRow(int outerIndex, Direction dir) {
+        return outerNodes[outerIndex].getRow(dir, null);
+    }
+
+    public void clearRow(int outerIndex, Direction dir) {
+        outerNodes[outerIndex].clearRow(dir);
+    }
+
+    public boolean canClearRow(int outerIndex, Direction dir){
+        return outerNodes[outerIndex].canClear(dir);
+    }
+
+    public void setRow(int outerIndex, Direction dir, List<Piece> pieces) {
+        outerNodes[outerIndex].setRow(dir, pieces);
     }
 
     public boolean movePossible(Move move) {
         return outerNodes[move.getPlacementNode()].movePossible(move.getDirection());
+    }
+
+    private List<ClearRow> rowsCompleted() {
+        List<ClearRow> completedRows = new ArrayList<>();
+        for (InnerNode innerNode : changedNodes) {
+            completedRows.addAll(innerNode.rowsCompleted());
+        }
+        changedNodes.clear();
+        return completedRows;
+    }
+
+    public List<ClearRow> getAvailableActions() {
+        return actionStack.peek().getAvailableActions();
     }
 
     public INode[] getOuterNodes() {

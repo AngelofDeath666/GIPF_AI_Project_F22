@@ -1,13 +1,15 @@
 package ai.gr64.Utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import ai.gr64.Data.Enums.Direction;
+import ai.gr64.Data.Interfaces.IAction;
 import ai.gr64.Engine.DTOs.GameState;
-import ai.gr64.Engine.DTOs.Move;
+import ai.gr64.Engine.DTOs.Actions.Move;
 
 public class BoardUtils {
     // Returns all possible moves to that can be made, only legal moves are included
@@ -28,6 +30,12 @@ public class BoardUtils {
             }
         }
         return moves.toArray(new Move[0]);
+    }
+
+    public static List<IAction> getAllActions(GameState state) {
+        List<IAction> actions = Arrays.asList(GetAllMoves(state));
+        actions.addAll(state.getAvailableActions());
+        return actions;
     }
 
     private static Map<Integer, int[]> cachedLayers = new HashMap<Integer, int[]>();

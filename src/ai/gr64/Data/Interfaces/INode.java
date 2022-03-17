@@ -1,7 +1,10 @@
 package ai.gr64.Data.Interfaces;
 
+import java.util.List;
+
 import ai.gr64.Data.Enums.Direction;
 import ai.gr64.Data.Enums.Piece;
+import ai.gr64.Engine.DTOs.GameGraph.InnerNode;
 
 // Interface for all types of nodes on the game board, should only be two implementations, inner and outer.
 public interface INode {
@@ -10,6 +13,10 @@ public interface INode {
     boolean hasNeighbor(Direction dir);
     INode neighbor(Direction dir);
     boolean movePossible(Direction dir);
-    boolean slidePiece(Piece piece, Direction dir);
+    boolean slidePiece(Piece piece, Direction dir, List<InnerNode> changedNodes);
     char getNodeChar();
+    List<Piece> getRow(Direction dir, List<Piece> row);
+    void setRow(Direction dir, List<Piece> row);
+    void clearRow(Direction dir);
+    boolean canClear(Direction dir);
 }
