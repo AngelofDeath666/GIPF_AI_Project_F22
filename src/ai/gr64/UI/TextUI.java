@@ -15,7 +15,7 @@ import ai.gr64.Engine.DTOs.Move;
 import ai.gr64.Engine.DTOs.GameGraph.InnerNode;
 import ai.gr64.Engine.DTOs.GameGraph.OuterNode;
 import ai.gr64.Utils.BoardUtils;
-import javafx.util.Pair;
+import ai.gr64.Utils.Pair;
 
 public class TextUI implements IUI {
 

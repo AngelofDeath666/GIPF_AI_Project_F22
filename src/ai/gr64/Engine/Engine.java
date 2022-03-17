@@ -22,6 +22,7 @@ public class Engine {
     // The main loop of the game, gets the next move from the correct moveGen and uses it on the game board, should also handle checking whether the game is over, and who won.
     public void Run() {
         int turn = 0;
+        UI.UpdateUi(state);
         while (turn < 10000) {
            // Run Game 
            Move move = turn % 2 == 0 ? MoveGen1.NextMove(state) : MoveGen2.NextMove(state);

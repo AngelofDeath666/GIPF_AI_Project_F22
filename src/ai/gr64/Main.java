@@ -18,8 +18,8 @@ public class Main {
         
         var movegens = UI.startGame();
         //The move-gens choose how to play the game, whether it is a player, some random AI, og a smart AI of some kind
-        var moveGen1 = movegens.getKey();
-        var moveGen2 = movegens.getValue();
+        var moveGen1 = movegens.Item1;
+        var moveGen2 = movegens.Item2;
 
         //Pass them to the game
         var game = new Engine(moveGen1, moveGen2,UI, state);
