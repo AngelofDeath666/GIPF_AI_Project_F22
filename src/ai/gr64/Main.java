@@ -1,5 +1,6 @@
 package ai.gr64;
 
+import ai.gr64.AI.PlayerMoveGen;
 import ai.gr64.AI.RandomAI;
 import ai.gr64.Data.Enums.StartingPieces;
 import ai.gr64.Engine.Engine;
@@ -14,9 +15,11 @@ public class Main {
         GameState state = StateFactory.create(3, StartingPieces.NORMAL,15);
         var UI = new TextUI();
 
+        
+        var movegens = UI.startGame();
         //The move-gens choose how to play the game, whether it is a player, some random AI, og a smart AI of some kind
-        var moveGen1 = new RandomAI();
-        var moveGen2 = new RandomAI();
+        var moveGen1 = movegens.Item1;
+        var moveGen2 = movegens.Item2;
 
         //Pass them to the game
         var game = new Engine(moveGen1, moveGen2,UI, state);

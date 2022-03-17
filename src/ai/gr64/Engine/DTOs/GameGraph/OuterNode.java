@@ -3,7 +3,7 @@ package ai.gr64.Engine.DTOs.GameGraph;
 import ai.gr64.Data.Enums.Direction;
 import ai.gr64.Data.Enums.Piece;
 import ai.gr64.Data.Interfaces.INode;
-import ai.gr64.UI.TextUI;
+import ai.gr64.Data.Statics.TextStatics;
 
 // Class representing an OuterNode
 // An outer node is one of the outer-most spaces on the game board where a player can place a game piece, counterpart to the inner-nodes
@@ -11,6 +11,10 @@ public class OuterNode implements INode{
     // An array containing all neighbors to the node, while outer-nodes will have at most two, the index in the array specifies the direction of the connection
     // Based on the Direction-enum, where up-left is 0 and going clockwise as it increases
     private INode[] neighbors = new INode[6];
+
+
+    // Variable for the index of the outer node 
+    private int outerIndex;
 
     // Method to add a neighbor to a specific direction
     // This should never be called on an outer node in order to assure outer-nodes are only connected to inner-nodes, and not other outer nodes
@@ -56,7 +60,15 @@ public class OuterNode implements INode{
 
     @Override
     public char getNodeChar() {
-        return TextUI.outerSpaces;
+        return TextStatics.outerSpaces;
+    }
+
+    public int getOuterIndex() {
+        return outerIndex;
+    }
+
+    public void setOuterIndex(int outerIndex) {
+        this.outerIndex = outerIndex;
     }
 
 }
