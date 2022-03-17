@@ -31,11 +31,5 @@ public class Engine {
            UI.UpdateUi(state);
            turn++;
         }
-        state.unmakeAction();
-        UI.UpdateUi(state);
-        state.unmakeAction();
-        UI.UpdateUi(state);
-        state.unmakeAction();
-        UI.UpdateUi(state);
     }
 }
