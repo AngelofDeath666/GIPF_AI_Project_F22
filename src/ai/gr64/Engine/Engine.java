@@ -34,6 +34,19 @@ public class Engine {
                 ((Move) move).setPiece(turn % 2 == 0 ? Piece.WHITE : Piece.BLACK);
             state.makeAction(move);
             UI.UpdateUi(state);
+            int availableActions = state.getAvailableActions().size(); 
+            while (availableActions != 0) {
+                // clear a line
+                if (availableActions == 1) {
+                    // clear that line
+                    //state.clearRow(outerIndex, dir);
+                } else {
+                    //choose line to clear
+                }
+                availableActions--;
+                UI.UpdateUi(state);
+                
+            }
             turn++;
             if (turn % 2 == 0 ? (state.getWhitePiecesLeft() == 0) : (state.getBlackPiecesLeft() == 0))
                 gameRunning = false;

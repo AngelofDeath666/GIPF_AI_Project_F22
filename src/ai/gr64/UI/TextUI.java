@@ -49,7 +49,9 @@ public class TextUI implements IUI {
         }
 
         System.out.println(sb.toString());
-        System.out.println("\n\n\n" + TextStatics.messageP1 + TextStatics.messageOuterNode);
+        System.out.println("\n\n\n" + TextStatics.messageWhitePiecesLeft + state.getWhitePiecesLeft());
+        System.out.println(TextStatics.messageBlackPiecesLeft + state.getBlackPiecesLeft());
+        System.out.println(TextStatics.messageP1 + TextStatics.messageOuterNode);
 
     }
 
@@ -60,9 +62,8 @@ public class TextUI implements IUI {
             position = getValidNodePosition(state);
 
         System.out.println(TextStatics.messageDirection);
-        Direction dir = getValidDirection(position, state);
 
-        return new Move(Piece.WHITE, position, dir);
+        return getValidDirection(position, state);
 
     }
 
@@ -139,11 +140,12 @@ public class TextUI implements IUI {
     }
 
 
-    private Direction getValidDirection(int position, GameState state) {
+    private Move getValidDirection(int position, GameState state) {
         // validate direction and return
         Direction moveDirection = Direction.DOWN_LEFT;
         boolean validNeighbor = false;
         int direction;
+        Move move = null;
 
         do {
             try {
@@ -153,12 +155,21 @@ public class TextUI implements IUI {
                 continue;
             }
             moveDirection = Direction.fromValue(direction);
+            if (!state.getOuterNodes()[position].movePossible(moveDirection)) {
+                System.out.println(TextStatics.warningFilledRow);
+                continue;
+            }
             validNeighbor = state.getOuterNodes()[position].hasNeighbor(moveDirection);
-            if (!validNeighbor)
+            if (!validNeighbor) {
                 System.out.println(TextStatics.warningNoNeighbor);
+                continue;
+            }
+            move = new Move(Piece.NONE, position, moveDirection);
+            if (!state.movePossible(move)) 
+                validNeighbor = false;
         } while (!validNeighbor);
 
-        return moveDirection;
+        return move;
     }
 
     private int getValidNodePosition(GameState state) {

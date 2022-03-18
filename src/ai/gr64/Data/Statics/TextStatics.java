@@ -21,8 +21,11 @@ public class TextStatics {
     public static final String messageOuterNode = "Enter the coordinates of the outer node: ";
     public static final String messageDirection = "Enter the direction you wish to push your piece to: ";
     public static final String messagePlayersP1 = "0: human \n1: AI";
-    public static final String messagePlayersP2 = "Choose a player 1.";
-    public static final String messagePlayersP3 = "Choose a player 2.";    
+    public static final String messagePlayersP2 = "Choose the white player. You will go first: ";
+    public static final String messagePlayersP3 = "Choose the black player. You will go second: ";
+    public static final String messageWhitePiecesLeft = "White pieces left in reserve: ";
+    public static final String messageBlackPiecesLeft = "Black pieces left in reserve: ";
+    public static final String[] messageClearRowDirection = {"up-left", "up", "up-right", "right", "down-right", "down", "down-left", "left"};
     
     public static final String warningInner = "You made an illegal move, you can't place a piece on an inner node. Please try again.";
     public static final String warningOuter = "You made an illegal move, you can't move a piece to an outer node. Please try again.";
@@ -33,4 +36,5 @@ public class TextStatics {
     public static final String warningNumberDirection = "Not a number.";
     public static final String warningNumberPlayer = "Please enter 0 for human or 1 for AI.";
     public static final String warningNoNeighbor = "There is no neighbor in that direction.";
+    public static final String warningFullRow = "That row is full.";
 }
