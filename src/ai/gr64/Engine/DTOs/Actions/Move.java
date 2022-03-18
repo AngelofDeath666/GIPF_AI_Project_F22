@@ -48,15 +48,33 @@ public class Move implements IAction {
             state.setRow(placementNode, direction, afterRow);
             return;
         }
+
+        if (piece == Piece.WHITE){
+            state.setWhitePiecesLeft(state.getWhitePiecesLeft() - 1);
+            state.setWhitePiecesOnBoard(state.getWhitePiecesOnBoard() + 1);
+        } else {
+            state.setBlackPiecesOnBoard(state.getBlackPiecesOnBoard() + 1);
+            state.setBlackPiecesLeft(state.getBlackPiecesLeft() - 1);
+        }
+
         if (beforeRow == null)
             beforeRow = state.getRow(placementNode, direction);
         this.availableActions = state.makeMove(this);
+        state.setNextToPlace((piece == Piece.WHITE) ? Piece.BLACK : Piece.WHITE);
         if (afterRow == null)
             afterRow = state.getRow(placementNode, direction);
     }
 
     @Override
     public void unmakeAction(GameState state) {
+        if (piece == Piece.WHITE) {
+            state.setWhitePiecesLeft(state.getWhitePiecesLeft() + 1);
+            state.setWhitePiecesOnBoard(state.getWhitePiecesOnBoard() - 1);
+        } else {
+            state.setBlackPiecesLeft(state.getBlackPiecesLeft() + 1);
+            state.setBlackPiecesOnBoard(state.getBlackPiecesOnBoard() - 1);
+        }
+        state.setNextToPlace((piece != Piece.WHITE) ? Piece.BLACK : Piece.WHITE);
         state.setRow(placementNode, direction, beforeRow);
     }
 }

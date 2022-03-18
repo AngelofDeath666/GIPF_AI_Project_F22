@@ -40,10 +40,15 @@ public class ClearRow implements IAction {
         }
         
         state.clearRow(placementNode, direction);
-        if (this.sourceColor == Piece.WHITE)
+        
+        state.setWhitePiecesOnBoard(state.getWhitePiecesOnBoard() - whitePieces);
+        state.setBlackPiecesOnBoard(state.getBlackPiecesOnBoard() - blackPieces);
+
+        if (this.sourceColor == Piece.WHITE) {
             state.setWhitePiecesLeft(state.getWhitePiecesLeft() + whitePieces);
-        else
+        } else {
             state.setBlackPiecesLeft(state.getBlackPiecesLeft() + blackPieces);
+        }
         if (afterRow == null)
             afterRow = state.getRow(placementNode, direction);
         
@@ -55,6 +60,15 @@ public class ClearRow implements IAction {
 
     @Override
     public void unmakeAction(GameState state) {
+        state.setWhitePiecesOnBoard(state.getWhitePiecesOnBoard() + whitePieces);
+        state.setBlackPiecesOnBoard(state.getBlackPiecesOnBoard() + blackPieces);
+
+        if (this.sourceColor == Piece.WHITE) {
+            state.setWhitePiecesLeft(state.getWhitePiecesLeft() - whitePieces);
+        } else {
+            state.setBlackPiecesLeft(state.getBlackPiecesLeft() - blackPieces);
+        }
+
         state.setRow(placementNode, direction, beforeRow);
     }
 

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import ai.gr64.Data.Enums.Direction;
+import ai.gr64.Data.Enums.Piece;
 import ai.gr64.Data.Interfaces.IAction;
 import ai.gr64.Engine.DTOs.GameState;
 import ai.gr64.Engine.DTOs.Actions.Move;
@@ -30,6 +31,25 @@ public class BoardUtils {
             }
         }
         return moves.toArray(new Move[0]);
+    }
+
+    // Evaluates the board, if it is best for white a positive number is returned, if it is best for black a negative number is returned
+    public static int evaluateBoard(GameState state) {
+        boolean whitePlayerNext = state.getNextToPlace() == Piece.WHITE;
+        int whitePiecesLeft = state.getWhitePiecesLeft();
+        int blackPiecesLeft = state.getBlackPiecesLeft();
+        int whitePiecesOnBoard = state.getWhitePiecesOnBoard();
+        int blackPiecesOnBoard = state.getBlackPiecesOnBoard();
+
+        if (whitePlayerNext) {
+            if (whitePiecesLeft == 0)
+                return Integer.MIN_VALUE;
+        } else {
+            if (blackPiecesLeft == 0)
+                return Integer.MAX_VALUE;
+        }
+
+        return (whitePiecesLeft + whitePiecesOnBoard) - (blackPiecesLeft + blackPiecesOnBoard);
     }
 
     public static List<IAction> getAllActions(GameState state) {

@@ -18,10 +18,12 @@ import ai.gr64.Engine.DTOs.GameGraph.OuterNode;
 // Has information about, the board, how many pieces each player has left, etc.
 public class GameState {
     private int whitePiecesLeft, blackPiecesLeft;
+    private int whitePiecesOnBoard = 0, blackPiecesOnBoard = 0;
     private INode[] graph, outerNodes;
     public final int layers;
     private List<InnerNode> changedNodes = new ArrayList<>();
     private Deque<IAction> actionStack = new LinkedList<>();
+    private Piece nextToPlace = Piece.WHITE;
 
     public GameState(int startingPieces, INode[] graph, int layers) {
         this.setWhitePiecesLeft(startingPieces);
@@ -49,6 +51,30 @@ public class GameState {
                 ((OuterNode)nextNode).setOuterIndex(workingIndex);
             }
         }
+    }
+
+    public Piece getNextToPlace() {
+        return nextToPlace;
+    }
+
+    public void setNextToPlace(Piece nextToPlace) {
+        this.nextToPlace = nextToPlace;
+    }
+
+    public int getBlackPiecesOnBoard() {
+        return blackPiecesOnBoard;
+    }
+
+    public void setBlackPiecesOnBoard(int blackPiecesOnBoard) {
+        this.blackPiecesOnBoard = blackPiecesOnBoard;
+    }
+
+    public int getWhitePiecesOnBoard() {
+        return whitePiecesOnBoard;
+    }
+
+    public void setWhitePiecesOnBoard(int whitePiecesOnBoard) {
+        this.whitePiecesOnBoard = whitePiecesOnBoard;
     }
 
     public int getBlackPiecesLeft() {
@@ -82,10 +108,6 @@ public class GameState {
 
     // The method called when making a move on the board
     public List<ClearRow> makeMove(Move move) {
-        if (move.getPiece() == Piece.WHITE)
-            setWhitePiecesLeft(getWhitePiecesLeft() - 1);
-        else
-            setBlackPiecesLeft(getBlackPiecesLeft() - 1);
         if (move.getPlacementNode() >= outerNodes.length)
             throw new IndexOutOfBoundsException(
                     "The placement-node of move must be non-negative and lower then the number of outer nodes on the board");
