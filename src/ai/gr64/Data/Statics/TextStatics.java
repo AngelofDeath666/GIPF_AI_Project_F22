@@ -20,7 +20,7 @@ public class TextStatics {
     public static final String messageP1 = "Please enter the outer node you wish to put your piece on and then which inner node you wish to push it to.\n";
     public static final String messageOuterNode = "Enter the coordinates of the outer node: ";
     public static final String messageDirection = "Enter the direction you wish to push your piece to: ";
-    public static final String messagePlayersP1 = "0: human \n1: heuristic AI\n2: random moves";
+    public static final String messagePlayersP1 = "0: human \n1: AI\n2: random moves";
     public static final String messagePlayersP2 = "Choose the white player. You will go first: ";
     public static final String messagePlayersP3 = "Choose the black player. You will go second: ";
     public static final String messageWhitePiecesLeft = "White pieces left in reserve: ";
@@ -35,7 +35,7 @@ public class TextStatics {
     public static final String warningLetter = "Please enter a letter between a and i.";
     public static final String warningNumberRow = "Please enter a number corresponding to the row.";
     public static final String warningNumber = "Not a number.";
-    public static final String warningNumberPlayer = "Please enter 0 for human or 1 for AI.";
+    public static final String warningNumberPlayer = "Please enter 0 for human, 1 for AI or 2 for random moves.";
     public static final String warningNoNeighbor = "There is no neighbor in that direction.";
     public static final String warningFullRow = "That row is full.";
     public static final String warningFullNeighborRows = "That node only has full neighboring rows. Choose another.";

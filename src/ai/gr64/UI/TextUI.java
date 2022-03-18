@@ -148,7 +148,7 @@ public class TextUI implements IUI {
         boolean validNeighbor = false;
         int direction;
         Move move = null;
-
+        
         do {
             try {
                 direction = Integer.parseInt(scan.nextLine());
@@ -243,50 +243,14 @@ public class TextUI implements IUI {
 
     // Prints start explanation and chooses player type
     public Pair<IMoveGen,IMoveGen> startGame() {
-        int playerType;
-        IMoveGen player1 = new RandomAI();
-        IMoveGen player2 = new RandomAI();
-        boolean valid = false;
+        
         System.out.println(TextStatics.messagePlayersP1);
         System.out.println(TextStatics.messagePlayersP2);
-        do {
-            try {
-                playerType = Integer.parseInt(scan.nextLine());
-            } catch (Exception e) {
-                System.out.println(TextStatics.warningNumberPlayer);
-                continue;
-            }
-            if (playerType > 2 || playerType < 0) {
-                System.out.println(TextStatics.warningNumberPlayer);
-                continue;
-            }
-            if (playerType == 0) {
-                player1 = new PlayerMoveGen(this);
-            } else if (playerType == 1) 
-                player1 = new HeuristicAI();
-            valid = true;
-        } while (!valid);
-
-        valid = false;
+        
+        IMoveGen player1 = choosePlayerType();
         System.out.println(TextStatics.messagePlayersP3);
-        do {
-            try {
-                playerType = Integer.parseInt(scan.nextLine());
-            } catch (Exception e) {
-                System.out.println(TextStatics.warningNumberPlayer);
-                continue;
-            }
-            if (playerType > 1 || playerType < 0) {
-                System.out.println(TextStatics.warningNumberPlayer);
-                continue;
-            }
-            if (playerType == 0) {
-                player2 = new PlayerMoveGen(this);
-            } else if (playerType == 1) 
-                player1 = new HeuristicAI();
-            valid = true;
-        } while (!valid);
-
+        IMoveGen player2 = choosePlayerType();
+        
         System.out.println(TextStatics.explainDirection);
         return new Pair<IMoveGen,IMoveGen>(player1, player2);
     }
@@ -332,6 +296,33 @@ public class TextUI implements IUI {
 
 
         return "" + coordinateLetter + coordinateNumber;
+    }
+    private IMoveGen choosePlayerType() {
+        int playerType;
+        boolean valid = false;
+        IMoveGen player = null;
+        do {
+            try {
+                playerType = Integer.parseInt(scan.nextLine());
+            } catch (Exception e) {
+                System.out.println(TextStatics.warningNumberPlayer);
+                continue;
+            }
+            if (playerType > 2 || playerType < 0) {
+                System.out.println(TextStatics.warningNumberPlayer);
+                continue;
+            }
+            if (playerType == 0) {
+                player = new PlayerMoveGen(this);
+            } else if (playerType == 1) {
+                player = new HeuristicAI();
+            } else 
+                player = new RandomAI();
+            
+            valid = true;
+        } while (!valid);
+        
+        return player;
     }
 
 }
