@@ -53,13 +53,9 @@ public class BoardUtils {
     }
 
     public static List<IAction> getAllActions(GameState state) {
-        IAction[] moves = GetAllMoves(state);
-        List<IAction> actions = new ArrayList<>();
-        for (IAction moveAction : moves) {
-            actions.add(moveAction);
-        }
-        actions.addAll(state.getAvailableActions());
-        return actions;
+        if (!state.getAvailableActions().isEmpty())
+            return (List<IAction>)(List<?>)state.getAvailableActions();
+        return Arrays.asList(GetAllMoves(state));
     }
 
     private static Map<Integer, int[]> cachedLayers = new HashMap<Integer, int[]>();

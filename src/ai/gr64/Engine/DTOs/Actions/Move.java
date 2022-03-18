@@ -1,5 +1,6 @@
 package ai.gr64.Engine.DTOs.Actions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ai.gr64.Data.Enums.Direction;
@@ -12,7 +13,7 @@ public class Move implements IAction {
     private Piece piece;
     private int placementNode;
     private Direction direction;
-    private List<Piece> beforeRow, afterRow;
+    private List<Piece> beforeRow = new ArrayList<>(), afterRow = new ArrayList<>();
     private List<ClearRow> availableActions;
 
     public Move(Piece piece, int placementNode, Direction direction) {
@@ -44,11 +45,6 @@ public class Move implements IAction {
 
     @Override
     public void makeAction(GameState state) {
-        if (afterRow != null) {
-            state.setRow(placementNode, direction, afterRow);
-            return;
-        }
-
         if (piece == Piece.WHITE){
             state.setWhitePiecesLeft(state.getWhitePiecesLeft() - 1);
             state.setWhitePiecesOnBoard(state.getWhitePiecesOnBoard() + 1);
@@ -57,12 +53,17 @@ public class Move implements IAction {
             state.setBlackPiecesLeft(state.getBlackPiecesLeft() - 1);
         }
 
-        if (beforeRow == null)
-            beforeRow = state.getRow(placementNode, direction);
+        if (afterRow != null && !afterRow.isEmpty()) {
+            state.setRow(placementNode, direction, afterRow);
+            return;
+        }
+
+        if (beforeRow == null || beforeRow.isEmpty())
+            state.getRow(placementNode, direction, beforeRow);
         this.availableActions = state.makeMove(this);
-        state.setNextToPlace((piece == Piece.WHITE) ? Piece.BLACK : Piece.WHITE);
-        if (afterRow == null)
-            afterRow = state.getRow(placementNode, direction);
+        // state.setNextToPlace((state.getNextToPlace() == Piece.WHITE) ? Piece.BLACK : Piece.WHITE);
+        if (afterRow == null || afterRow.isEmpty())
+            state.getRow(placementNode, direction, afterRow);
     }
 
     @Override
@@ -74,7 +75,7 @@ public class Move implements IAction {
             state.setBlackPiecesLeft(state.getBlackPiecesLeft() + 1);
             state.setBlackPiecesOnBoard(state.getBlackPiecesOnBoard() - 1);
         }
-        state.setNextToPlace((piece != Piece.WHITE) ? Piece.BLACK : Piece.WHITE);
+        // state.setNextToPlace((state.getNextToPlace() == Piece.WHITE) ? Piece.BLACK : Piece.WHITE);
         state.setRow(placementNode, direction, beforeRow);
     }
 }

@@ -1,5 +1,6 @@
 package ai.gr64.Engine;
 
+import ai.gr64.AI.GameTree.GameTreeHandler;
 import ai.gr64.Data.Enums.Piece;
 import ai.gr64.Data.Interfaces.IAction;
 import ai.gr64.Data.Interfaces.IMoveGen;
@@ -35,18 +36,22 @@ public class Engine {
             if (move instanceof Move)
                 ((Move) move).setPiece(turn % 2 == 0 ? Piece.WHITE : Piece.BLACK);
             state.makeAction(move);
+            GameTreeHandler.moveRoot(move);
             UI.updateUi(state); 
             while (state.getAvailableActions().size() != 0) {
                 // clear a line
                 if (state.getAvailableActions().size() == 1) {
                     // clear that line
                     // write to ui that the specified line has been cleared
-                    state.makeAction(state.getAvailableActions().get(0));
+                    IAction action = state.getAvailableActions().get(0);
+                    state.makeAction(action);
+                    GameTreeHandler.moveRoot(action);
                     System.out.println(TextStatics.messageRemovedRow);
                 } else {
                     IAction action = (turn % 2 == 0 ? MoveGen1 : MoveGen2).GetClearRowAction(state);
                     //choose line to clear
                     state.makeAction(action);
+                    GameTreeHandler.moveRoot(action);
                     System.out.println(TextStatics.messageRemovedRow);
 
                 }

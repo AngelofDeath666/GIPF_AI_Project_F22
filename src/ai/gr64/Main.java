@@ -1,7 +1,6 @@
 package ai.gr64;
 
-import ai.gr64.AI.PlayerMoveGen;
-import ai.gr64.AI.RandomAI;
+import ai.gr64.AI.GameTree.GameTreeHandler;
 import ai.gr64.Data.Enums.StartingPieces;
 import ai.gr64.Engine.Engine;
 import ai.gr64.Engine.DTOs.GameState;
@@ -13,6 +12,7 @@ public class Main {
     public static void main(String[] args) {
         //Generate nessesary resources
         GameState state = StateFactory.create(3, StartingPieces.NORMAL,15);
+        GameTreeHandler.init(state);
         var UI = new TextUI();
 
         
