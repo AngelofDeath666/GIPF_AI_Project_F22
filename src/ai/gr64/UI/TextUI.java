@@ -1,5 +1,7 @@
 package ai.gr64.UI;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 import org.w3c.dom.Text;
@@ -68,7 +70,7 @@ public class TextUI implements IUI {
 
     }
 
-    // prints the coordinates in the start of a row
+    // prints the coordinates in the end of a row
     private void PrintCoordinatesEnds(int currentLayer, int[] layerEnds, StringBuilder sb) {
         int nodeCount = currentLayer == 0 ? layerEnds[0]
                 : layerEnds[currentLayer / 2] - layerEnds[currentLayer / 2 - 1];
@@ -77,7 +79,7 @@ public class TextUI implements IUI {
 
     }
 
-    // Prints the coordinates in the end of a row
+    // Prints the coordinates in the start of a row
     private void PrintCoordinatesStart(int currentLayer, StringBuilder sb) {
         sb.append(((char) (97 + (currentLayer / 2))) + "1 ");
 
@@ -152,7 +154,7 @@ public class TextUI implements IUI {
             try {
                 direction = Integer.parseInt(scan.nextLine());
             } catch (Exception e) {
-                System.out.println(TextStatics.warningNumberDirection);
+                System.out.println(TextStatics.warningNumber);
                 continue;
             }
             moveDirection = Direction.fromValue(direction);
@@ -290,8 +292,45 @@ public class TextUI implements IUI {
 
     @Override
     public ClearRow getClearRow(GameState state) {
-        return null;
+        List<ClearRow> actions = state.getAvailableActions();
+        int clearIndex = 0;
+        boolean valid = false; 
+        for (int i = 0; i < actions.size(); i++) {
+            System.out.println(i + 1 + ") " + placementToCoordinate(state, actions.get(i).getPlacementNode()) + " " + actions.get(i).getDirection().toString().toLowerCase());
+        }
+        System.out.println(TextStatics.messageRowChoice);
+        do {
+            try {
+                clearIndex = Integer.parseInt(scan.nextLine());
+            } catch (Exception e) {
+                System.out.println(TextStatics.warningNumber);
+                continue;
+            }
+            if (clearIndex < 1 || clearIndex > actions.size()) {
+                System.out.println(TextStatics.warningOutOfRange);
+                continue;
+            }
+            
+            valid = true;
+        } while (!valid);
+
+        return actions.get(clearIndex-1);
         
+    }
+
+    private String placementToCoordinate(GameState state, int placementNode) {
+        int index = Arrays.asList(state.getGraph()).indexOf(state.getOuterNodes()[placementNode]);
+        int[] ends = BoardUtils.LayerEnds(state.layers);
+        int layer;
+        for (layer = 0; layer < ends.length; layer++) {
+            if (ends[layer] > index) 
+                break;
+        }
+        char coordinateLetter = (char) (97 + layer);
+        int coordinateNumber = index - (layer != 0 ? ends[layer - 1] : 0) + 1;
+
+
+        return "" + coordinateLetter + coordinateNumber;
     }
 
 }

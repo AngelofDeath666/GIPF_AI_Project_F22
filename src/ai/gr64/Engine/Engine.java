@@ -46,6 +46,8 @@ public class Engine {
                 } else {
                     IAction action = (turn % 2 == 0 ? MoveGen1 : MoveGen2).GetClearRowAction(state);
                     //choose line to clear
+                    state.makeAction(action);
+
                 }
                 UI.updateUi(state);
                 

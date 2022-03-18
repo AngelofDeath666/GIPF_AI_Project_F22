@@ -29,14 +29,5 @@ public class PlayerMoveGen implements IMoveGen {
         // TODO Auto-generated method stub
         return UI.getClearRow(state);
     }
-
-    /*
-    @Override
-    public IAction GetClearRowAction(GameState state) {
-        
-        return UI.getPlayerClearRow(state.getAvailableActions());
-        return null;
-    }
-    */
     
 }
