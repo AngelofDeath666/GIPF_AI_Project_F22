@@ -276,14 +276,14 @@ public class TextUI implements IUI {
                 System.out.println(TextStatics.warningNumberPlayer);
                 continue;
             }
-            if (playerType > 1 || playerType < 0) {
+            if (playerType > 2 || playerType < 0) {
                 System.out.println(TextStatics.warningNumberPlayer);
                 continue;
             }
             if (playerType == 0) {
                 player2 = new PlayerMoveGen(this);
             } else if (playerType == 1) 
-                player1 = new HeuristicAI();
+                player2 = new HeuristicAI();
             valid = true;
         } while (!valid);
 

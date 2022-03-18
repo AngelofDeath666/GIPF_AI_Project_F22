@@ -4,7 +4,6 @@ import ai.gr64.Data.Enums.Piece;
 import ai.gr64.Data.Interfaces.IAction;
 import ai.gr64.Engine.DTOs.GameState;
 import ai.gr64.Engine.DTOs.Actions.NullAction;
-import ai.gr64.Utils.BoardUtils;
 
 public class GameTreeHandler {
     private static GameState state;
@@ -20,7 +19,7 @@ public class GameTreeHandler {
     }
 
     public static void moveRoot(IAction action) {
-        
+        root = new GameTreeNode(action, state);
     }
 
 }

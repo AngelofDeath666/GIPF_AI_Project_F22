@@ -6,6 +6,7 @@ import java.util.List;
 
 import ai.gr64.Data.Interfaces.IAction;
 import ai.gr64.Engine.DTOs.GameState;
+import ai.gr64.Engine.DTOs.Actions.Move;
 import ai.gr64.Utils.BoardUtils;
 
 public class GameTreeNode {
@@ -28,6 +29,8 @@ public class GameTreeNode {
                                 : ((List<IAction>) (List<?>) state.getAvailableActions()));
         children = new ArrayList<>(actions.size());
         for (IAction action : actions) {
+            if (action instanceof Move)
+                ((Move)action).setPiece(state.getNextToPlace());
             children.add(new GameTreeNode(action, state));
         }
 
@@ -59,7 +62,7 @@ public class GameTreeNode {
 
     public int alphaBeta(int depth, int alpha, int beta, boolean maximizing) {
         boolean noActionsLeft = BoardUtils.getAllActions(state).isEmpty();
-        if (depth == 0 && noActionsLeft) {
+        if (depth == 0 || noActionsLeft) {
             return BoardUtils.evaluateBoard(state);
         }
 

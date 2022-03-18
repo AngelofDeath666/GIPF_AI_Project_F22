@@ -76,17 +76,16 @@ public class OuterNode implements INode{
 
     @Override
     public List<Piece> getRow(Direction dir, List<Piece> row) {
-        if (row != null)
+        if (row != null && !row.isEmpty())
             return row;
-        row = new ArrayList<>();
         return neighbor(dir).getRow(dir, row);
     }
 
     @Override
-    public void setRow(Direction dir, List<Piece> row) {
+    public void setRow(Direction dir, List<Piece> row, int startIndex) {
         INode neighbor = neighbor(dir);
         if (neighbor != null)
-            neighbor.setRow(dir, row);
+            neighbor.setRow(dir, row, 0);
     }
 
     @Override
