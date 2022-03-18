@@ -11,7 +11,7 @@ import ai.gr64.Engine.DTOs.GameState;
 public class ClearRow implements IAction {
     private int placementNode, whitePieces = 0, blackPieces = 0;
     private Direction direction;
-    private List<Piece> beforeRow, afterRow;
+    private List<Piece> beforeRow = new ArrayList<>(), afterRow = new ArrayList<>();
     private List<ClearRow> availableActions = new ArrayList<>();
     private Piece sourceColor;
 
@@ -29,8 +29,8 @@ public class ClearRow implements IAction {
     public void makeAction(GameState state) {
         availableActions.addAll(state.getAvailableActions());
         availableActions.remove(this);
-        if (beforeRow == null) {
-            beforeRow = state.getRow(placementNode, direction);
+        if (beforeRow == null || beforeRow.isEmpty()) {
+            state.getRow(placementNode, direction, beforeRow);
             
             for (Piece piece : beforeRow) {
                 if (piece == Piece.WHITE)
@@ -51,7 +51,7 @@ public class ClearRow implements IAction {
             state.setBlackPiecesLeft(state.getBlackPiecesLeft() + blackPieces);
         }
         if (afterRow == null)
-            afterRow = state.getRow(placementNode, direction);
+            state.getRow(placementNode, direction, afterRow);
         
         for (ClearRow clear : availableActions) {
             if (!state.canClearRow(clear.getPlacementNode(), clear.getDirection()))

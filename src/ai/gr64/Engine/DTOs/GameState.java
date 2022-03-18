@@ -98,12 +98,18 @@ public class GameState {
     }
 
     public void makeAction(IAction action) {
+        if (action instanceof Move move) {
+            nextToPlace = move.getPiece() == Piece.WHITE ? Piece.BLACK : Piece.WHITE;
+        }
         actionStack.push(action);
         action.makeAction(this);
     }
 
     public void unmakeAction() {
-        actionStack.pop().unmakeAction(this);
+        IAction action = actionStack.pop();
+        action.unmakeAction(this);
+        if (action instanceof Move move)
+            nextToPlace = move.getPiece();
     }
 
     // The method called when making a move on the board
@@ -112,11 +118,11 @@ public class GameState {
             throw new IndexOutOfBoundsException(
                     "The placement-node of move must be non-negative and lower then the number of outer nodes on the board");
         outerNodes[move.getPlacementNode()].slidePiece(move.getPiece(), move.getDirection(), changedNodes);
-        return rowsCompleted(move.getPiece());
+        return rowsCompleted();
     }
 
-    public List<Piece> getRow(int outerIndex, Direction dir) {
-        return outerNodes[outerIndex].getRow(dir, null);
+    public List<Piece> getRow(int outerIndex, Direction dir, List<Piece> listToAddTo) {
+        return outerNodes[outerIndex].getRow(dir, listToAddTo);
     }
 
     public void clearRow(int outerIndex, Direction dir) {
@@ -128,17 +134,17 @@ public class GameState {
     }
 
     public void setRow(int outerIndex, Direction dir, List<Piece> pieces) {
-        outerNodes[outerIndex].setRow(dir, pieces);
+        outerNodes[outerIndex].setRow(dir, pieces, 0);
     }
 
     public boolean movePossible(Move move) {
         return outerNodes[move.getPlacementNode()].movePossible(move.getDirection());
     }
 
-    private List<ClearRow> rowsCompleted(Piece sourcePiece) {
+    private List<ClearRow> rowsCompleted() {
         List<ClearRow> completedRows = new ArrayList<>();
         for (InnerNode innerNode : changedNodes) {
-            completedRows.addAll(innerNode.rowsCompleted(sourcePiece));
+            completedRows.addAll(innerNode.rowsCompleted());
         }
         changedNodes.clear();
         return completedRows;
