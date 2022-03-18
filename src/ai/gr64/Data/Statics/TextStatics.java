@@ -20,7 +20,7 @@ public class TextStatics {
     public static final String messageP1 = "Please enter the outer node you wish to put your piece on and then which inner node you wish to push it to.\n";
     public static final String messageOuterNode = "Enter the coordinates of the outer node: ";
     public static final String messageDirection = "Enter the direction you wish to push your piece to: ";
-    public static final String messagePlayersP1 = "0: human \n1: AI";
+    public static final String messagePlayersP1 = "0: human \n1: heuristic AI\n2: random moves";
     public static final String messagePlayersP2 = "Choose the white player. You will go first: ";
     public static final String messagePlayersP3 = "Choose the black player. You will go second: ";
     public static final String messageWhitePiecesLeft = "White pieces left in reserve: ";

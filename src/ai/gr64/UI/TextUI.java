@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import org.w3c.dom.Text;
 
+import ai.gr64.AI.HeuristicAI;
 import ai.gr64.AI.PlayerMoveGen;
 import ai.gr64.AI.RandomAI;
 import ai.gr64.Data.Enums.Direction;
@@ -257,13 +258,14 @@ public class TextUI implements IUI {
                 System.out.println(TextStatics.warningNumberPlayer);
                 continue;
             }
-            if (playerType > 1 || playerType < 0) {
+            if (playerType > 2 || playerType < 0) {
                 System.out.println(TextStatics.warningNumberPlayer);
                 continue;
             }
             if (playerType == 0) {
                 player1 = new PlayerMoveGen(this);
-            }
+            } else if (playerType == 1) 
+                player1 = new HeuristicAI();
             valid = true;
         } while (!valid);
 
@@ -282,7 +284,8 @@ public class TextUI implements IUI {
             }
             if (playerType == 0) {
                 player2 = new PlayerMoveGen(this);
-            }
+            } else if (playerType == 1) 
+                player1 = new HeuristicAI();
             valid = true;
         } while (!valid);
 
