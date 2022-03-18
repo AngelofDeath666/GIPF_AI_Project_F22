@@ -23,8 +23,8 @@ public class RandomAI implements IMoveGen {
 
     @Override
     public IAction GetClearRowAction(GameState state) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Not implemented.");
+        List<IAction> actions = BoardUtils.getAllActions(state);
+        return actions.get(rand.nextInt(actions.size()));
     }
     
 }
