@@ -35,7 +35,8 @@ public class ClearRow implements IAction {
             for (Piece piece : beforeRow) {
                 if (piece == Piece.WHITE)
                     whitePieces++;
-                else blackPieces++;
+                else if (piece == Piece.BLACK) 
+                    blackPieces++;
             }
         }
         

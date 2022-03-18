@@ -1,7 +1,10 @@
 package ai.gr64.UI;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
+import ai.gr64.AI.HeuristicAI;
 import ai.gr64.AI.PlayerMoveGen;
 import ai.gr64.AI.RandomAI;
 import ai.gr64.Data.Enums.Direction;
@@ -11,6 +14,7 @@ import ai.gr64.Data.Interfaces.INode;
 import ai.gr64.Data.Interfaces.IUI;
 import ai.gr64.Data.Statics.TextStatics;
 import ai.gr64.Engine.DTOs.GameState;
+import ai.gr64.Engine.DTOs.Actions.ClearRow;
 import ai.gr64.Engine.DTOs.Actions.Move;
 import ai.gr64.Engine.DTOs.GameGraph.InnerNode;
 import ai.gr64.Engine.DTOs.GameGraph.OuterNode;
@@ -26,7 +30,7 @@ public class TextUI implements IUI {
     // This method prints the board, starting with WhiteSpaces and then alternating
     // between Nodes and Diagonal Connections
     @Override
-    public void UpdateUi(GameState state) {
+    public void updateUi(GameState state) {
         INode[] graph = state.getGraph();
         int layers = (state.layers * 2 + 3) * 2 - 1;
         StringBuilder sb = new StringBuilder();
@@ -47,23 +51,25 @@ public class TextUI implements IUI {
         }
 
         System.out.println(sb.toString());
-        System.out.println("\n\n\n" + TextStatics.messageP1 + TextStatics.messageOuterNode);
+        System.out.println("\n\n\n" + TextStatics.messageWhitePiecesLeft + state.getWhitePiecesLeft());
+        System.out.println(TextStatics.messageBlackPiecesLeft + state.getBlackPiecesLeft());
+        System.out.println(TextStatics.messageP1 + TextStatics.messageOuterNode);
 
     }
 
     @Override
-    public Move GetPlayerInput(GameState state) {
+    public Move getPlayerInput(GameState state) {
         int position = -1;
         while (position == -1)
             position = getValidNodePosition(state);
 
-        Direction dir = getValidDirection(position, state);
+        System.out.println(TextStatics.messageDirection);
 
-        return new Move(Piece.WHITE, position, dir);
+        return getValidDirection(position, state);
 
     }
 
-    // prints the coordinates in the start of a row
+    // prints the coordinates in the end of a row
     private void PrintCoordinatesEnds(int currentLayer, int[] layerEnds, StringBuilder sb) {
         int nodeCount = currentLayer == 0 ? layerEnds[0]
                 : layerEnds[currentLayer / 2] - layerEnds[currentLayer / 2 - 1];
@@ -72,7 +78,7 @@ public class TextUI implements IUI {
 
     }
 
-    // Prints the coordinates in the end of a row
+    // Prints the coordinates in the start of a row
     private void PrintCoordinatesStart(int currentLayer, StringBuilder sb) {
         sb.append(((char) (97 + (currentLayer / 2))) + "1 ");
 
@@ -136,26 +142,36 @@ public class TextUI implements IUI {
     }
 
 
-    private Direction getValidDirection(int position, GameState state) {
+    private Move getValidDirection(int position, GameState state) {
         // validate direction and return
         Direction moveDirection = Direction.DOWN_LEFT;
         boolean validNeighbor = false;
         int direction;
+        Move move = null;
 
         do {
             try {
                 direction = Integer.parseInt(scan.nextLine());
             } catch (Exception e) {
-                System.out.println(TextStatics.warningNumberDirection);
+                System.out.println(TextStatics.warningNumber);
                 continue;
             }
             moveDirection = Direction.fromValue(direction);
+            if (!state.getOuterNodes()[position].movePossible(moveDirection)) {
+                System.out.println(TextStatics.warningFilledRow);
+                continue;
+            }
             validNeighbor = state.getOuterNodes()[position].hasNeighbor(moveDirection);
-            if (!validNeighbor)
+            if (!validNeighbor) {
                 System.out.println(TextStatics.warningNoNeighbor);
+                continue;
+            }
+            move = new Move(Piece.NONE, position, moveDirection);
+            if (!state.movePossible(move)) 
+                validNeighbor = false;
         } while (!validNeighbor);
 
-        return moveDirection;
+        return move;
     }
 
     private int getValidNodePosition(GameState state) {
@@ -196,20 +212,126 @@ public class TextUI implements IUI {
                     continue;
                 }
 
+                
+                position = currentLayer == 0 ? nodeNum - 1 : layerEnds[currentLayer - 1] + nodeNum - 1;
+                int outerPosition = (graph[position] instanceof OuterNode ? ((OuterNode)graph[position]).getOuterIndex() : -1);
+                boolean invalid = false;
+                for (int i = 0; i < 6; i++) {
+                    if (outerPosition == -1)
+                        break;
+                    if (state.movePossible(new Move(Piece.NONE, outerPosition, Direction.fromValue(i)))) 
+                        break;
+                    if (i == 5) {
+                        invalid = true;
+                    }
+                }
+                if (invalid) {
+                    System.out.println(TextStatics.warningFullNeighborRows);
+                    continue;
+                } 
+                
                 // This line will be skipped if the input is invalid
                 valid = true;
 
             } while (!valid);
-            position = currentLayer == 0 ? nodeNum - 1 : layerEnds[currentLayer - 1] + nodeNum - 1;
+            
         } while (graph[position] instanceof InnerNode);
 
         return ((OuterNode) graph[position]).getOuterIndex();
 
     }
+
     // Prints start explanation and chooses player type
     public Pair<IMoveGen,IMoveGen> startGame() {
+        int playerType;
+        IMoveGen player1 = new RandomAI();
+        IMoveGen player2 = new RandomAI();
+        boolean valid = false;
+        System.out.println(TextStatics.messagePlayersP1);
+        System.out.println(TextStatics.messagePlayersP2);
+        do {
+            try {
+                playerType = Integer.parseInt(scan.nextLine());
+            } catch (Exception e) {
+                System.out.println(TextStatics.warningNumberPlayer);
+                continue;
+            }
+            if (playerType > 2 || playerType < 0) {
+                System.out.println(TextStatics.warningNumberPlayer);
+                continue;
+            }
+            if (playerType == 0) {
+                player1 = new PlayerMoveGen(this);
+            } else if (playerType == 1) 
+                player1 = new HeuristicAI();
+            valid = true;
+        } while (!valid);
+
+        valid = false;
+        System.out.println(TextStatics.messagePlayersP3);
+        do {
+            try {
+                playerType = Integer.parseInt(scan.nextLine());
+            } catch (Exception e) {
+                System.out.println(TextStatics.warningNumberPlayer);
+                continue;
+            }
+            if (playerType > 1 || playerType < 0) {
+                System.out.println(TextStatics.warningNumberPlayer);
+                continue;
+            }
+            if (playerType == 0) {
+                player2 = new PlayerMoveGen(this);
+            } else if (playerType == 1) 
+                player1 = new HeuristicAI();
+            valid = true;
+        } while (!valid);
+
         System.out.println(TextStatics.explainDirection);
-        return new Pair<IMoveGen,IMoveGen>(new RandomAI(), new RandomAI());
+        return new Pair<IMoveGen,IMoveGen>(player1, player2);
+    }
+
+    @Override
+    public ClearRow getClearRow(GameState state) {
+        List<ClearRow> actions = state.getAvailableActions();
+        int clearIndex = 0;
+        boolean valid = false; 
+        for (int i = 0; i < actions.size(); i++) {
+            System.out.println(i + 1 + ") " + placementToCoordinate(state, actions.get(i).getPlacementNode()) + " " + actions.get(i).getDirection().toString().toLowerCase());
+        }
+        System.out.println(TextStatics.messageRowChoice);
+        do {
+            try {
+                clearIndex = Integer.parseInt(scan.nextLine());
+            } catch (Exception e) {
+                System.out.println(TextStatics.warningNumber);
+                continue;
+            }
+            if (clearIndex < 1 || clearIndex > actions.size()) {
+                System.out.println(TextStatics.warningOutOfRange);
+                continue;
+            }
+            
+            valid = true;
+        } while (!valid);
+
+        return actions.get(clearIndex-1);
+        
+    }
+
+    private String placementToCoordinate(GameState state, int placementNode) {
+        int index = Arrays.asList(state.getGraph()).indexOf(state.getOuterNodes()[placementNode]);
+        int[] ends = BoardUtils.LayerEnds(state.layers);
+        int layer;
+        for (layer = 0; layer < ends.length; layer++) {
+            if (ends[layer] > index) 
+                break;
+        }
+        char coordinateLetter = (char) (97 + layer);
+        int coordinateNumber = index - (layer != 0 ? ends[layer - 1] : 0) + 1;
+
+
+        return "" + coordinateLetter + coordinateNumber;
     }
 
 }
