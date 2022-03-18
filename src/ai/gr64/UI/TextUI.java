@@ -213,9 +213,12 @@ public class TextUI implements IUI {
 
                 
                 position = currentLayer == 0 ? nodeNum - 1 : layerEnds[currentLayer - 1] + nodeNum - 1;
+                int outerPosition = (graph[position] instanceof OuterNode ? ((OuterNode)graph[position]).getOuterIndex() : -1);
                 boolean invalid = false;
                 for (int i = 0; i < 6; i++) {
-                    if (state.movePossible(new Move(Piece.NONE, position, Direction.fromValue(i)))) 
+                    if (outerPosition == -1)
+                        break;
+                    if (state.movePossible(new Move(Piece.NONE, outerPosition, Direction.fromValue(i)))) 
                         break;
                     if (i == 5) {
                         invalid = true;
