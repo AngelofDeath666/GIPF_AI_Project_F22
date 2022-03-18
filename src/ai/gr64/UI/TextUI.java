@@ -13,6 +13,7 @@ import ai.gr64.Data.Interfaces.INode;
 import ai.gr64.Data.Interfaces.IUI;
 import ai.gr64.Data.Statics.TextStatics;
 import ai.gr64.Engine.DTOs.GameState;
+import ai.gr64.Engine.DTOs.Actions.ClearRow;
 import ai.gr64.Engine.DTOs.Actions.Move;
 import ai.gr64.Engine.DTOs.GameGraph.InnerNode;
 import ai.gr64.Engine.DTOs.GameGraph.OuterNode;
@@ -28,7 +29,7 @@ public class TextUI implements IUI {
     // This method prints the board, starting with WhiteSpaces and then alternating
     // between Nodes and Diagonal Connections
     @Override
-    public void UpdateUi(GameState state) {
+    public void updateUi(GameState state) {
         INode[] graph = state.getGraph();
         int layers = (state.layers * 2 + 3) * 2 - 1;
         StringBuilder sb = new StringBuilder();
@@ -56,7 +57,7 @@ public class TextUI implements IUI {
     }
 
     @Override
-    public Move GetPlayerInput(GameState state) {
+    public Move getPlayerInput(GameState state) {
         int position = -1;
         while (position == -1)
             position = getValidNodePosition(state);
@@ -210,11 +211,26 @@ public class TextUI implements IUI {
                     continue;
                 }
 
+                
+                position = currentLayer == 0 ? nodeNum - 1 : layerEnds[currentLayer - 1] + nodeNum - 1;
+                boolean invalid = false;
+                for (int i = 0; i < 6; i++) {
+                    if (state.movePossible(new Move(Piece.NONE, position, Direction.fromValue(i)))) 
+                        break;
+                    if (i == 5) {
+                        invalid = true;
+                    }
+                }
+                if (invalid) {
+                    System.out.println(TextStatics.warningFullNeighborRows);
+                    continue;
+                } 
+                
                 // This line will be skipped if the input is invalid
                 valid = true;
 
             } while (!valid);
-            position = currentLayer == 0 ? nodeNum - 1 : layerEnds[currentLayer - 1] + nodeNum - 1;
+            
         } while (graph[position] instanceof InnerNode);
 
         return ((OuterNode) graph[position]).getOuterIndex();
@@ -267,6 +283,12 @@ public class TextUI implements IUI {
 
         System.out.println(TextStatics.explainDirection);
         return new Pair<IMoveGen,IMoveGen>(player1, player2);
+    }
+
+    @Override
+    public ClearRow getClearRow(GameState state) {
+        return null;
+        
     }
 
 }

@@ -20,7 +20,14 @@ public class PlayerMoveGen implements IMoveGen {
     @Override
     public Move NextMove(GameState state) {
         //return new Move(Piece.WHITE, 0, Direction.DOWN_RIGHT);
-        return UI.GetPlayerInput(state);
+        return UI.getPlayerInput(state);
+    }
+
+
+    @Override
+    public IAction GetClearRowAction(GameState state) {
+        // TODO Auto-generated method stub
+        return UI.getClearRow(state);
     }
 
     /*
