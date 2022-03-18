@@ -4,8 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-import org.w3c.dom.Text;
-
 import ai.gr64.AI.HeuristicAI;
 import ai.gr64.AI.PlayerMoveGen;
 import ai.gr64.AI.RandomAI;

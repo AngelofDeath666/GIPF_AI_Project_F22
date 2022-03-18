@@ -47,6 +47,7 @@ public class Engine {
                     IAction action = (turn % 2 == 0 ? MoveGen1 : MoveGen2).GetClearRowAction(state);
                     //choose line to clear
                     state.makeAction(action);
+                    System.out.println(TextStatics.messageRemovedRow);
 
                 }
                 UI.updateUi(state);
